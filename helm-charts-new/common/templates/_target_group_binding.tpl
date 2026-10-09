@@ -1,4 +1,4 @@
-{{- define "common.configmap" }}
+{{- define "common.targetGroupBinding" }}
 
 {{- if .Values.targetGroupBinding.enabled }}
 apiVersion: elbv2.k8s.aws/v1beta1
