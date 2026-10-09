@@ -163,3 +163,13 @@ serviceAccount:
     name: frontend-sa
     annotations:
       eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/frontend-role
+# ---------------------------------------------------
+# Target Group Binding
+# ---------------------------------------------------
+targetGroupBinding:
+  enabled: true
+  name: shopverse-dev-frontend-tgb
+  values:
+    targetType: "ip"
+    targetGroupName: shopverse-dev-frontend-tg
+    # targetGroupARN: "REPLACE_WITH_TERRAFORM_OUTPUT"
