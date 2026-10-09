@@ -20,4 +20,5 @@ spec:
   # targetGroupARN: REPLACE_WITH_FRONTEND_TARGET_GROUP_ARN
 {{- end }}
 {{- end }}
+
 {{- end }}
