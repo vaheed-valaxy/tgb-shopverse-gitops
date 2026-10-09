@@ -1,3 +1,3 @@
-{{- define "common.serviceaccount" }}
+{{- define "common.serviceAccount" }}
 
 {{- end }}
