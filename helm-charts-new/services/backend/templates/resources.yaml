@@ -1,12 +1,14 @@
 {{ include "common.configmap" . }}
 ---
-{{ include "common.serviceaccount" . }}
+{{ include "common.serviceAccount" . }}
 ---
 {{ include "common.deployment" . }}
 ---
 {{ include "common.service" . }}
 ---
 {{ include "common.hpa" . }}
+---
+{{ include "common.targetGroupBinding" . }}
 
 
 
