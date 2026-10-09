@@ -145,3 +145,23 @@ serviceAccount:
     name: backend-sa
     annotations:
       eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/backend-role
+# ---------------------------------------------------
+# Target Group Binding
+# ---------------------------------------------------
+targetGroupBinding:
+  enabled: true
+  name: shopverse-dev-backend-tgb
+  values:
+    targetType: "ip"
+    targetGroupName: shopverse-dev-backend-tg
+    # targetGroupARN: "REPLACE_WITH_TERRAFORM_OUTPUT"
+
+
+
+
+
+
+
+
+
+  
