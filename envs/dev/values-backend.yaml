@@ -155,13 +155,4 @@ targetGroupBinding:
     targetType: "ip"
     targetGroupName: shopverse-dev-backend-tg
     # targetGroupARN: "REPLACE_WITH_TERRAFORM_OUTPUT"
-
-
-
-
-
-
-
-
-
-  
+    
