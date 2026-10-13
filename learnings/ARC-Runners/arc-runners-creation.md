@@ -207,11 +207,11 @@ After the job completes, the job-executing runner pod should be removed. The lis
 ## 9. Important considerations for Shopverse
 Before switching your existing CI/CD pipelines to ARC, keep these points in mind:  
 
-**Docker builds**: Docker-in-Docker requires privileged operation. Isolate ARC runner workloads on a dedicated EKS node group where practical.
-**AWS access**: Use GitHub OIDC to assume narrowly scoped IAM roles for ECR pushes and deployments, rather than giving every runner broad AWS permissions.  
-**Capacity**: maxRunners: 3 limits concurrent runner jobs for this scale set, but it does not provision extra EKS nodes. Ensure your cluster has enough CPU and memory or configure node autoscaling.  
-**Workflow migration**: Keep your existing shopverse-dev EC2 runner until ARC successfully builds, scans, signs, and publishes an image. Migrate workflows gradually so you don't lose your bootstrap path.  
-**Logs**: Configure log retention for ARC controllers and runner workloads before using the system for production pipelines.  
+- **Docker builds**: Docker-in-Docker requires privileged operation. Isolate ARC runner workloads on a dedicated EKS node group where practical.
+- **AWS access**: Use GitHub OIDC to assume narrowly scoped IAM roles for ECR pushes and deployments, rather than giving every runner broad AWS permissions.  
+- **Capacity**: `maxRunners: 3` limits concurrent runner jobs for this scale set, but it does not provision extra EKS nodes. Ensure your cluster has enough CPU and memory or configure node autoscaling.  
+- **Workflow migration**: Keep your existing `shopverse-dev` EC2 runner until ARC successfully builds, scans, signs, and publishes an image. Migrate workflows gradually so you don't lose your bootstrap path.  
+- **Logs**: Configure log retention for ARC controllers and runner workloads before using the system for production pipelines.  
 
 
 ### Recommended rollout: 
