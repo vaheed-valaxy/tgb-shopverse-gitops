@@ -255,7 +255,8 @@ githubConfigSecret: pre-defined-secret
 ```
 
 **My recommendation**: For a quick learning or development setup, a fine-grained PAT can work. For your production-oriented Shopverse platform, I would use a GitHub App because it provides a dedicated automation identity and avoids tying runner management to a person's account.  
-One final distinction: the token above authenticates **ARC to GitHub so it can manage runners**. Your workflow's authentication for pushing Helm values commits is a separate concern; it can use **GITHUB_TOKEN**, a GitHub App installation token, or a suitably permissioned PAT.  
+
+**One final distinction**: the token above authenticates **ARC to GitHub so it can manage runners**. Your workflow's authentication for pushing Helm values commits is a separate concern; it can use **GITHUB_TOKEN**, a GitHub App installation token, or a suitably permissioned PAT.  
 
 
 
