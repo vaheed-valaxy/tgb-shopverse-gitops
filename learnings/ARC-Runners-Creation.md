@@ -175,14 +175,14 @@ For the ARC Helm chart, the resulting Kubernetes Secret should contain these exa
 **Use this checklist before proceeding:**    
 GitHub App setup checklist                       0 of 8
 
-[  ] GitHub App is owned by vaheed-valaxy  
-[  ] Repository Administration permission is Read and write  
-[  ] Repository Metadata permission is Read-only  
-[  ] Organization Self-hosted runners permission is Read and write  
-[  ] App is installed on shopverse-gitops   
-[  ] App ID and installation ID are recorded  
-[  ] Private key is stored securely outside Git  
-[ _] AWS Secrets Manager secret contains the three required fields   
+[] GitHub App is owned by vaheed-valaxy  
+[] Repository Administration permission is Read and write  
+[] Repository Metadata permission is Read-only  
+[] Organization Self-hosted runners permission is Read and write  
+[] App is installed on shopverse-gitops   
+[] App ID and installation ID are recorded  
+[] Private key is stored securely outside Git  
+[] AWS Secrets Manager secret contains the three required fields   
 
 ### What permissions should you add?  
 For your GitHub App `shopverse-arc-runner`, add these **repository permissions** if you want to use it for both ARC and GitOps updates.
