@@ -16,8 +16,10 @@ shopverse-gitops/
                 └── values.yaml
 ```
 
-GitHub recommends installing the controller and runner scale sets in separate namespaces.  
+GitHub recommends installing the controller and runner scale sets in separate namespaces. 
+
 The two installations will be:  
+
 - `arc-controller` in `arc-systems` namespace  
 - `shopverse-dev-runners` in `arc-runners` namespace
   
