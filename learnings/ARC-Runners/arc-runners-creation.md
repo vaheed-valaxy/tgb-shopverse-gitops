@@ -156,24 +156,24 @@ Merge these entries into your existing project specification rather than replaci
 ## 7. Deploy in the correct order  
 Because the runner scale set depends on the ARC controller and its installed custom resource definitions, deploy the controller first. 
 
-**1.** Commit `arc-controller.yaml` and sync the `arc-controller` Application in Argo CD.
-**2.** Verify the controller is healthy:
+**1.** Commit `arc-controller.yaml` and sync the `arc-controller` Application in Argo CD.  
+**2.** Verify the controller is healthy:  
 ```bash
 kubectl get pods -n arc-systems
-kubectl get crds | grep actions.github.com
+kubectl get crds | grep actions.github.com  
 ```
-**3.** Commit arc-runners.yaml and helm-charts-new/platform/arc/runners/values.yaml.
-**4.** Sync the arc-runners Application.
-**5.** Check the resulting resources:
+**3.** Commit arc-runners.yaml and helm-charts-new/platform/arc/runners/values.yaml.  
+**4.** Sync the arc-runners Application.  
+**5.** Check the resulting resources:  
 ```bash
 kubectl get pods -n arc-runners
 kubectl get autoscalingrunnersets -n arc-runners
 kubectl get ephemeralrunners -n arc-runners
 ```
-The listener pod can remain running even when there are no job-executing runner pods. `With minRunners: 0`, the runner pods should be created on demand.
+The listener pod can remain running even when there are no job-executing runner pods. `With minRunners: 0`, the runner pods should be created on demand.  
 
 ## 8. Update a GitHub Actions workflow to use ARC  
-Once the runner scale set is online, update a test workflow in `shopverse-gitops`:
+Once the runner scale set is online, update a test workflow in `shopverse-gitops`:  
 ```yaml
 name: Test ARC Runner
 
@@ -207,10 +207,10 @@ kubectl get pods -n arc-runners -w
 
 After the job completes, the job-executing runner pod should be removed. The listener pod and ARC controller remain available to manage subsequent jobs.  
 
-## 9. Important considerations for Shopverse
+## 9. Important considerations for Shopverse  
 Before switching your existing CI/CD pipelines to ARC, keep these points in mind:  
 
-- **Docker builds**: Docker-in-Docker requires privileged operation. Isolate ARC runner workloads on a dedicated EKS node group where practical.
+- **Docker builds**: Docker-in-Docker requires privileged operation. Isolate ARC runner workloads on a dedicated EKS node group where practical.  
 - **AWS access**: Use GitHub OIDC to assume narrowly scoped IAM roles for ECR pushes and deployments, rather than giving every runner broad AWS permissions.  
 - **Capacity**: `maxRunners: 3` limits concurrent runner jobs for this scale set, but it does not provision extra EKS nodes. Ensure your cluster has enough CPU and memory or configure node autoscaling.  
 - **Workflow migration**: Keep your existing `shopverse-dev` EC2 runner until ARC successfully builds, scans, signs, and publishes an image. Migrate workflows gradually so you don't lose your bootstrap path.  
