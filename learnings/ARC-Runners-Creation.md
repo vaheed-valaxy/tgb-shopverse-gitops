@@ -19,7 +19,7 @@ GitHub recommends installing the controller and runner scale sets in separate na
 The two installations will be:  
 - `arc-controller` in `arc-systems` namespace  
 - `shopverse-dev-runners` in `arc-runners` namespace  
-The runner scale set name is what you'll reference in your workflow's runs-on.
+The runner scale set name is what you'll reference in your workflow's `runs-on`.
 
 ## 2. Install the ARC controller through Argo CD  
 Create `argocd/applications/arc-controller.yaml`:  
@@ -54,14 +54,49 @@ spec:
       - CreateNamespace=true
 ```
 
-## 3. Create the `GitHub App` or `PAT Token` secret securely for authentication   
+## 3. Create the `PAT Token` or `GitHub App` secret securely for authentication   
 Create a GitHub App with repository **Administration: Read and write** permission, install it on **vaheed-valaxy/shopverse-gitops**, and obtain:
 - GitHub App ID
 - Installation ID
 - Downloaded private key
+  
 The private key should not be committed to Git.
 
-### 3.1 Create GitHub App
+### 3.1 Create PAT Token  
+Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a GitHub App**. GitHub officially supports classic PATs and fine-grained PATs for ARC.
+For your Shopverse EKS setup, you can choose either approach:  
+
+**Feature**	            -->             **PAT**	                 -->                   **GitHub App**  
+
+ARC runner              -->      authentication	                 -->      Supported Supported  
+Setup complexity	    -->      Simpler	                     -->      More setup  
+Credential lifetime	    -->      Depends on token expiry policy	 -->      Installation tokens expire after 1 hour  
+Identity	            -->      User account	                 -->      Dedicated application  
+Production suitability	-->      Possible, with careful controls -->      Generally preferable for automation  
+
+### If you want to use a PAT  
+For your repository `vaheed-valaxy/shopverse-gitops`, follow these steps:  
+
+1. Create a fine-grained PAT in GitHub under **Settings → Developer settings → Personal access tokens → Fine-grained tokens.**  
+2. Select the appropriate resource owner and grant access to the repository or organization where ARC will register runners.
+3. Configure the required permissions:
+   - **Repository-level runners**: Administration — Read and write.
+   - **Organization-level runners**: Administration — Read and Self-hosted runners — Read and write, according to GitHub's current ARC documentation.
+4. Store the token as a Kubernetes Secret in the same namespace as your runner scale set, for example `arc-runners`.
+   
+Example:  
+```bash
+kubectl create secret generic pre-defined-secret \
+  --namespace=arc-runners \
+  --from-literal=github_token='YOUR_PAT'
+```
+
+Then reference it in your ARC runner scale set Helm values:  
+```yaml
+githubConfigSecret: pre-defined-secret
+```
+
+### 3.2 Create GitHub App
 **Which permissions should your Shopverse GitHub App have?**
 For the repository-level runner scale set we are configuring for `vaheed-valaxy/shopverse-gitops`,  
 use the following settings from GitHub's official ARC authentication guide  
@@ -220,46 +255,11 @@ The example assumes the App has been installed on the organization and granted a
 You can then update the Helm values file and push a commit using Git. For a PR-based promotion, use the same token with a PR creation action. Installation tokens expire after one hour, so generate one when the job needs it.    
 
 
-### 3.2 Create PAT Token  
-Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a GitHub App**. GitHub officially supports classic PATs and fine-grained PATs for ARC.
-For your Shopverse EKS setup, you can choose either approach:  
 
-**Feature**	            -->             **PAT**	                 -->                   **GitHub App**  
-
-ARC runner              -->      authentication	                 -->      Supported Supported  
-Setup complexity	    -->      Simpler	                     -->      More setup  
-Credential lifetime	    -->      Depends on token expiry policy	 -->      Installation tokens expire after 1 hour  
-Identity	            -->      User account	                 -->      Dedicated application  
-Production suitability	-->      Possible, with careful controls -->      Generally preferable for automation  
-
-### If you want to use a PAT  
-For your repository `vaheed-valaxy/shopverse-gitops`, follow these steps:  
-
-1. Create a fine-grained PAT in GitHub under **Settings → Developer settings → Personal access tokens → Fine-grained tokens.**  
-2. Select the appropriate resource owner and grant access to the repository or organization where ARC will register runners.
-3. Configure the required permissions:
-   - **Repository-level runners**: Administration — Read and write.
-   - **Organization-level runners**: Administration — Read and Self-hosted runners — Read and write, according to GitHub's current ARC documentation.
-4. Store the token as a Kubernetes Secret in the same namespace as your runner scale set, for example `arc-runners`.
-   
-Example:  
-```bash
-kubectl create secret generic pre-defined-secret \
-  --namespace=arc-runners \
-  --from-literal=github_token='YOUR_PAT'
-```
-
-Then reference it in your ARC runner scale set Helm values:  
-```yaml
-githubConfigSecret: pre-defined-secret
-```
 
 **My recommendation**: For a quick learning or development setup, a fine-grained PAT can work. For your production-oriented Shopverse platform, I would use a GitHub App because it provides a dedicated automation identity and avoids tying runner management to a person's account.  
 
 **One final distinction**: the token above authenticates **ARC to GitHub so it can manage runners**. Your workflow's authentication for pushing Helm values commits is a separate concern; it can use **GITHUB_TOKEN**, a GitHub App installation token, or a suitably permissioned PAT.  
-
-
-
 
 
 ```bash
