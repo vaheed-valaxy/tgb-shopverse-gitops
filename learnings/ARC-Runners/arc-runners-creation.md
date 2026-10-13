@@ -162,7 +162,7 @@ Because the runner scale set depends on the ARC controller and its installed cus
 kubectl get pods -n arc-systems
 kubectl get crds | grep actions.github.com  
 ```
-**3.** Commit `arc-runners.yam`l and `helm-charts-new/platform/arc/runners/values.yaml`.  
+**3.** Commit `arc-runners.yaml` and `helm-charts-new/platform/arc/runners/values.yaml`.  
 **4.** Sync the `arc-runners` Application.  
 **5.** Check the resulting resources:  
 ```bash
