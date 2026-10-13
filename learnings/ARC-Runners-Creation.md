@@ -226,11 +226,11 @@ For your Shopverse EKS setup, you can choose either approach:
 
 **Feature**	                        **PAT**	                                   **GitHub App**  
 
-ARC runner                       authentication	                         Supported Supported  
-Setup complexity	             Simpler	                             More setup  
-Credential lifetime	             Depends on token expiry policy	         Installation tokens expire after 1 hour  
-Identity	                     User account	                          Dedicated application  
-Production suitability	         Possible, with careful controls	      Generally preferable for automation  
+ARC runner              -->      authentication	                 -->      Supported Supported  
+Setup complexity	    -->      Simpler	                     -->      More setup  
+Credential lifetime	    -->      Depends on token expiry policy	 -->      Installation tokens expire after 1 hour  
+Identity	            -->      User account	                 -->      Dedicated application  
+Production suitability	-->      Possible, with careful controls -->      Generally preferable for automation  
 
 
 
