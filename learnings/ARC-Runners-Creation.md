@@ -65,7 +65,6 @@ The private key should not be committed to Git.
 ### 3.1 Create PAT Token  
 Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a GitHub App**. GitHub officially supports classic PATs and fine-grained PATs for ARC.
 For your Shopverse EKS setup, you can choose either approach:  
-
 -------------------------------------------------------------------------------------------------------------------------
 **Feature**	               |            **PAT**	                     |                   **GitHub App**   
 -------------------------------------------------------------------------------------------------------------------------
