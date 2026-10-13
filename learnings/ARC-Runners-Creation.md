@@ -79,7 +79,7 @@ Why these permissions?
 > Do not grant unrelated permissions such as Contents, Actions, Secrets, or Workflows unless another separate integration genuinely requires them.
 > ARC's authentication app does not need broad source-code access merely to manage runners.
 
-**Step:1 Open vaheed-valaxy organization settings - Open Developer settings**  
+**Step 1 Open `vaheed-valaxy` organization settings - Open Developer settings**  
 In the left-hand sidebar of the organization settings page:
 1. Scroll down to **Developer settings.**
 2. Select **GitHub Apps.**
