@@ -55,6 +55,35 @@ spec:
       - CreateNamespace=true
 ```
 
+## 4. Create the runner scale set values  
+Create `helm-charts-new/platform/arc/runners/values.yaml`:  
+```yaml
+
+githubConfigUrl: "https://github.com/vaheed-valaxy/shopverse-gitops"
+
+githubConfigSecret: shopverse-github-app
+
+runnerScaleSetName: shopverse-dev-runners
+
+minRunners: 0
+maxRunners: 3
+
+containerMode:
+  type: dind
+
+template:
+  spec:
+    containers:
+      - name: runner
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+```
+
 
 
 
