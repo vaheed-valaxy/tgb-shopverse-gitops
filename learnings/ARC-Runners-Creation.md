@@ -67,13 +67,14 @@ Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a
 For your Shopverse EKS setup, you can choose either approach:  
 
 -------------------------------------------------------------------------------------------------------------------------
-**Feature**	               |            **PAT**	                     |                   **GitHub App**  
+**Feature**	               |            **PAT**	                     |                   **GitHub App**   
 -------------------------------------------------------------------------------------------------------------------------
-ARC runner authentication  |      Supported     	                 |     Supported  
-Setup complexity	       |      Simpler	                         |     More setup  
-Credential lifetime	       |      Depends on token expiry policy	 |     Installation tokens expire after 1 hour  
-Identity	               |      User account	                     |     Dedicated application  
-Production suitability	   |      Possible, with careful controls    |     Generally preferable for automation  
+
+ARC runner authentication  |      Supported       	                 |     Supported    
+Setup complexity  	       |      Simpler  	                         |     More setup    
+Credential lifetime  	   |      Depends on token expiry policy  	 |     Installation tokens expire after 1 hour    
+Identity  	               |      User account  	                 |     Dedicated application    
+Production suitability     |      Possible, with careful controls    |     Generally preferable for automation    
 -------------------------------------------------------------------------------------------------------------------------
 ### If you want to use a PAT  
 For your repository `vaheed-valaxy/shopverse-gitops`, follow these steps:  
