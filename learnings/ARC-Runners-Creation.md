@@ -224,7 +224,7 @@ You can then update the Helm values file and push a commit using Git. For a PR-b
 Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a GitHub App**. GitHub officially supports classic PATs and fine-grained PATs for ARC.
 For your Shopverse EKS setup, you can choose either approach:  
 
-**Feature**	                        **PAT**	                                   **GitHub App**  
+**Feature**	            -->             **PAT**	                 -->                   **GitHub App**  
 
 ARC runner              -->      authentication	                 -->      Supported Supported  
 Setup complexity	    -->      Simpler	                     -->      More setup  
@@ -232,9 +232,30 @@ Credential lifetime	    -->      Depends on token expiry policy	 -->      Instal
 Identity	            -->      User account	                 -->      Dedicated application  
 Production suitability	-->      Possible, with careful controls -->      Generally preferable for automation  
 
+### If you want to use a PAT  
+For your repository `vaheed-valaxy/shopverse-gitops`, follow these steps:  
 
+1. Create a fine-grained PAT in GitHub under **Settings → Developer settings → Personal access tokens → Fine-grained tokens.**  
+2. Select the appropriate resource owner and grant access to the repository or organization where ARC will register runners.
+3. Configure the required permissions:
+   - **Repository-level runners**: Administration — Read and write.
+   - **Organization-level runners**: Administration — Read and Self-hosted runners — Read and write, according to GitHub's current ARC documentation.
+4. Store the token as a Kubernetes Secret in the same namespace as your runner scale set, for example `arc-runners`.
+   
+Example:  
+```bash
+kubectl create secret generic pre-defined-secret \
+  --namespace=arc-runners \
+  --from-literal=github_token='YOUR_PAT'
+```
 
+Then reference it in your ARC runner scale set Helm values:  
+```yaml
+githubConfigSecret: pre-defined-secret
+```
 
+**My recommendation**: For a quick learning or development setup, a fine-grained PAT can work. For your production-oriented Shopverse platform, I would use a GitHub App because it provides a dedicated automation identity and avoids tying runner management to a person's account.  
+One final distinction: the token above authenticates **ARC to GitHub so it can manage runners**. Your workflow's authentication for pushing Helm values commits is a separate concern; it can use **GITHUB_TOKEN**, a GitHub App installation token, or a suitably permissioned PAT.  
 
 
 
