@@ -96,7 +96,7 @@ This configuration:
 
 GitHub documents the dind container mode for Docker-based workflows. It requires privileged container operation, so isolate these runners from application workloads and do not use this configuration for untrusted pull-request code without additional security controls.  
 
-## 4. Create the runner scale set Argo CD Application
+## 5. Create the runner scale set Argo CD Application
 Create `argocd/applications/arc-runners.yaml`:  
 ```yaml
 
@@ -135,7 +135,7 @@ spec:
 This uses Argo CD's multi-source support: the Helm chart comes from GitHub's OCI registry, and the values file comes from your GitOps repository.  
 
 
-## 5. Check your AppProject permissions  
+## 6. Check your AppProject permissions  
 Your existing `shopverse-dev-app-project` must allow the GitOps repository, the ARC Helm chart repository, and both target namespaces.  
 Check `argocd/projects/shopverse-dev-app-project.yaml` (use your actual file path if different). Its relevant settings should include: 
 
@@ -153,7 +153,7 @@ spec:
 ```
 Merge these entries into your existing project specification rather than replacing its other permissions. If your GitOps repository is private, make sure Argo CD already has repository credentials configured.  
 
-## 6. Deploy in the correct order  
+## 7. Deploy in the correct order  
 Because the runner scale set depends on the ARC controller and its installed custom resource definitions, deploy the controller first. 
 
 **1.** Commit `arc-controller.yaml` and sync the `arc-controller` Application in Argo CD.
@@ -172,7 +172,7 @@ kubectl get ephemeralrunners -n arc-runners
 ```
 The listener pod can remain running even when there are no job-executing runner pods. `With minRunners: 0`, the runner pods should be created on demand.
 
-## 7. Update a GitHub Actions workflow to use ARC  
+## 8. Update a GitHub Actions workflow to use ARC  
 Once the runner scale set is online, update a test workflow in `shopverse-gitops`:
 ```yaml
 name: Test ARC Runner
@@ -223,11 +223,5 @@ Before switching your existing CI/CD pipelines to ARC, keep these points in mind
 3. Run a test workflow on shopverse-dev-runners.  
 4. Test your actual Docker build and ECR push pipeline.  
 5. Move the remaining CI jobs to ARC and retire the EC2 runner only after validation.  
-
-
-
-
-
-
 
 
