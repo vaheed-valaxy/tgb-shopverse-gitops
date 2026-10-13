@@ -15,6 +15,7 @@ shopverse-gitops/
             └── runners/
                 └── values.yaml
 ```
+
 GitHub recommends installing the controller and runner scale sets in separate namespaces.  
 The two installations will be:  
 - `arc-controller` in `arc-systems` namespace  
@@ -54,7 +55,8 @@ spec:
       - CreateNamespace=true
 ```
 
-## 3. Create the `PAT Token` or `GitHub App` secret securely for authentication   
+## 3. Create the `PAT Token` or `GitHub App` secret securely for authentication 
+
 Create a GitHub App with repository **Administration: Read and write** permission, install it on **vaheed-valaxy/shopverse-gitops**, and obtain:
 - GitHub App ID
 - Installation ID
@@ -62,9 +64,11 @@ Create a GitHub App with repository **Administration: Read and write** permissio
   
 The private key should not be committed to Git.
 
-### 3.1 Create PAT Token  
+### 3.1 Create PAT Token 
+
 Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a GitHub App**. GitHub officially supports classic PATs and fine-grained PATs for ARC.
 For your Shopverse EKS setup, you can choose either approach:  
+
 -------------------------------------------------------------------------------------------------------------------------
 **Feature**	               |            **PAT**	                     |                   **GitHub App**   
 -------------------------------------------------------------------------------------------------------------------------
