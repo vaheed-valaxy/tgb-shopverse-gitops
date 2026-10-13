@@ -19,7 +19,8 @@ shopverse-gitops/
 GitHub recommends installing the controller and runner scale sets in separate namespaces.  
 The two installations will be:  
 - `arc-controller` in `arc-systems` namespace  
-- `shopverse-dev-runners` in `arc-runners` namespace  
+- `shopverse-dev-runners` in `arc-runners` namespace
+  
 The runner scale set name is what you'll reference in your workflow's `runs-on`.
 
 ## 3. Install the ARC controller through Argo CD  
