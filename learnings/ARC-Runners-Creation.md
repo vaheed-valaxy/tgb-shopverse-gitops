@@ -186,16 +186,50 @@ GitHub App setup checklist                       0 of 8
 
 ### What permissions should you add?  
 For your GitHub App `shopverse-arc-runner`, add these **repository permissions** if you want to use it for both ARC and GitOps updates.
-**Permission	Access	Purpose**  
-Administration	Read and write	ARC repository-level runner registration, if using repository scope  
-Metadata	Read-only	GitHub repository metadata  
-Contents	Read and write	Clone, modify Helm values, and push commits  
-Pull requests	Read and write	Create and update promotion PRs  
+**Permission --> Access	--> Purpose**  
+Administration --> Read and write --> ARC repository-level runner registration, if using repository scope  
+Metadata --> Read-only --> GitHub repository metadata  
+Contents --> Read and write	--> Clone, modify Helm values, and push commits  
+Pull requests --> Read and write --> Create and update promotion PRs  
+
+Keep the **Organization → Self-hosted runners** permission at Read and write if you're registering ARC runners at the organization level. The Administration permission is not required for organization-level runner registration according to GitHub's ARC documentation.
+
+Only grant permissions needed by your actual workflows. For example, if your job only pushes a direct commit and never creates a PR, you may not need Pull requests write access.  
+
+### How would your workflow use it?  
+You would store the App ID, installation ID, and private key securely, then generate a short-lived installation access token during the job.  
+```yaml
+- name: Generate GitHub App token
+  id: app-token
+  uses: actions/create-github-app-token@v2
+  with:
+    app-id: ${{ secrets.SHOPVERSE_APP_ID }}
+    private-key: ${{ secrets.SHOPVERSE_APP_PRIVATE_KEY }}
+    owner: vaheed-valaxy
+    repositories: shopverse-gitops
+
+- name: Checkout GitOps repository
+  uses: actions/checkout@v4
+  with:
+    repository: vaheed-valaxy/shopverse-gitops
+    token: ${{ steps.app-token.outputs.token }}
+    persist-credentials: true
+```
+The example assumes the App has been installed on the organization and granted access to `shopverse-gitops`. Store the private key and App ID as GitHub Actions secrets, or retrieve them through your existing secrets-management setup.  
+
+You can then update the Helm values file and push a commit using Git. For a PR-based promotion, use the same token with a PR creation action. Installation tokens expire after one hour, so generate one when the job needs it.    
 
 
+### 3.2 Create PAT Token  
+Yes. **You can authenticate ARC using a Personal Access Token (PAT) instead of a GitHub App**. GitHub officially supports classic PATs and fine-grained PATs for ARC.
+For your Shopverse EKS setup, you can choose either approach:  
 
-
-
+**Feature**	                        **PAT**	                                   **GitHub App**
+ARC runner                       authentication	                         Supported Supported
+Setup complexity	             Simpler	                             More setup
+Credential lifetime	             Depends on token expiry policy	         Installation tokens expire after 1 hour
+Identity	                     User account	                          Dedicated application
+Production suitability	         Possible, with careful controls	      Generally preferable for automation
 
 
 
