@@ -62,22 +62,127 @@ Create a GitHub App with repository **Administration: Read and write** permissio
 The private key should not be committed to Git.
 
 ### 3.1 Create GitHub App
-#### Which permissions should your Shopverse GitHub App have?
+**Which permissions should your Shopverse GitHub App have?**
+For the repository-level runner scale set we are configuring for `vaheed-valaxy/shopverse-gitops`,  
+use the following settings from GitHub's official ARC authentication guide  
+
+Permission category	Permission	Access  
+Repository permissions	Administration	Read and write  
+Repository permissions	Metadata	Read-only  
+Organization permissions	Self-hosted runners	Read and write  
+
+Why these permissions?
+- **Administration — Read and write:** required for ARC to register and manage runners at repository scope.
+- **Metadata — Read-only:** allows the app to access basic repository metadata. GitHub requires this permission for repository access.
+- **Self-hosted runners — Read and write:** enables runner management at the organization level as specified in GitHub's ARC authentication instructions.
+
+> Do not grant unrelated permissions such as Contents, Actions, Secrets, or Workflows unless another separate integration genuinely requires them.
+> ARC's authentication app does not need broad source-code access merely to manage runners.
+
+**Step:1 Open vaheed-valaxy organization settings - Open Developer settings**  
+In the left-hand sidebar of the organization settings page:
+1. Scroll down to **Developer settings.**
+2. Select **GitHub Apps.**
+3. Click **New GitHub App.**
+
+**Step 2 — Fill in the basic information**  
+**GitHub App name:** `shopverse-arc-runner`
+**Homepage URL:** `https://github.com/actions/actions-runner-controller`
+**Webhook**: `uncheck`
+
+**Step 3 — Configure Repository permissions**  
+Scroll down to the **Permissions section**. Expand **Repository permissions** and configure:  
+**Administration:** `Read and write`  
+**Metadata:** `Read-only`  
+For each permission, open the access dropdown and select the indicated value. Leave every other repository permission set to **No access**.  
+
+**Step 4 — Configure Organization permissions**  
+Expand **Organization permissions** and set:  
+**Self-hosted runners:** `Read and write`
+Leave unrelated organization permissions set to **No access**.  
+
+> These settings follow GitHub's official ARC authentication instructions. Repository Administration write access is specifically needed for
+> repository-level runner registration; it is not needed when registering only at organization scope.
+
+
+**Step 5 — Configure account installation visibility**  
+Find **Where can this GitHub App be installed?**  
+Select:   
+   **- Only on this account**  
+
+Because the app is owned by `vaheed-valaxy`, this keeps the app private to that account or organization instead of allowing other GitHub accounts to install it.
+
+Click **Create GitHub App** at the bottom of the page.
+
+**Step 6 — Generate the private key**  
+After creation, GitHub opens the app's settings page.  
+**1. Record the App ID**  
+**2. Generate a private key** (Scroll to **Private keys**, click **Generate a private key**, and save the downloaded **.pem** file in a secure location.)
+ 
+**Step 7 — Install the app on your organization**   
+The app's existence alone does not grant it repository access. You must install it.    
+1. In the app settings sidebar, select **Install App**.  
+2. Find `vaheed-valaxy` in the account list.  
+3. Click **Install**.
+4. If GitHub presents repository selection options, choose **Only select repositories**.
+5. Select `shopverse-gitops`.
+6. Review the permissions and click the confirmation button to complete installation.  
+
+If ARC will also manage runners for `shopverse-backend` or `shopverse-frontend`, decide whether to install the app on those repositories too. Do not grant repository access to projects that do not need this runner service.
+
+If your organization requires approval for app installation or permission changes, an organization owner must approve the request.
+
+
+**Step 9 — Retrieve the Installation ID**  
+After installing the app, open its installation details.  
+The installation URL normally follows this pattern:  
+
+```text
+https://github.com/organizations/vaheed-valaxy/settings/installations/INSTALLATION_ID
+```
+
+For example, if the URL ends in `/settings/installations/12345678`, the installation ID is `12345678`. Use your actual ID, not this example.  
+Keep the three required values together in your secret-management system:  
+
+**Value**	**Where to find it**    
+App ID	GitHub App's General settings  
+Installation ID	App installation details  
+Private key	Downloaded .pem file  
+
+These are the values ARC needs for GitHub App authentication.  
 
 
 
+## 5. Store the credentials in AWS Secrets Manager  
+For your EKS environment, I recommend AWS Secrets Manager as the durable secret store and External Secrets Operator to synchronize the credentials into Kubernetes.  
+Create a secret named, for example: `shopverse/dev/arc/github-app`  
+Use this JSON structure:
+```json
+{
+  "github_app_id": "YOUR_APP_ID",
+  "github_app_installation_id": "YOUR_INSTALLATION_ID",
+  "github_app_private_key": "-----BEGIN RSA PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END RSA PRIVATE KEY-----"
+}
+```
+Use the actual PEM content and preserve its newlines correctly. Depending on the PEM format, the header may say `BEGIN RSA PRIVATE KEY` or `BEGIN PRIVATE KEY`; preserve the downloaded key exactly.
 
+For the ARC Helm chart, the resulting Kubernetes Secret should contain these exact key names:
+- `github_app_id`
+- `github_app_installation_id`
+- `github_app_private_key`
 
+## Verify before installing ARC
+**Use this checklist before proceeding:**  
+GitHub App setup checklist                     0 of 8
 
-
-
-
-
-
-
-
-
-
+[ ] GitHub App is owned by vaheed-valaxy
+[ ] Repository Administration permission is Read and write
+[ ] Repository Metadata permission is Read-only
+[ ] Organization Self-hosted runners permission is Read and write
+[ ] App is installed on shopverse-gitops
+[ ] App ID and installation ID are recorded
+[ ] Private key is stored securely outside Git
+[ ] AWS Secrets Manager secret contains the three required fields
 
 
 
