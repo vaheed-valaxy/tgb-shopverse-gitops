@@ -41,6 +41,8 @@ argocd proj role get shopverse-dev github-actions-dev
 
 ## Create ArgoCD token 
 ```bash
+argocd proj role create-token <project-name> <role-name> --expires-in 30d
+
 argocd proj role create-token \
   shopverse-dev \
   shopverse-gh-actions-dev  \
