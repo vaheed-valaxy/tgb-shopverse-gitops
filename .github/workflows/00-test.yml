@@ -1,0 +1,22 @@
+name: ARC Docker Build Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker-build:
+    runs-on: shopverse-dev-runners
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify runner
+        run: |
+          echo "ARC runner picked up the job"
+          uname -a
+          docker version
+
+      - name: Build test image
+        run: |
+          docker build -t shopverse-arc-test:latest .
