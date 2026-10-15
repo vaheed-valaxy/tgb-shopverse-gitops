@@ -13,7 +13,8 @@ containerMode:
   type: "dind"
   
 # Runner Service Account
-noPermissionServiceAccount:
-  annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-runner-role"    # ShopverseDevArcRunnerECRRole
+resourceMeta:
+  noPermissionServiceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-runner-role"    # ShopverseDevArcRunnerECRRole
 
