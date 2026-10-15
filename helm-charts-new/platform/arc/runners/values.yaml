@@ -4,6 +4,10 @@ githubConfigSecret: "shopverse-github-token"
 
 runnerScaleSetName: "shopverse-dev-runners"
 
+controllerServiceAccount:
+  namespace: arc-systems
+  name: arc-controller-gha-rs-controller
+
 minRunners: 1
 maxRunners: 3
 
