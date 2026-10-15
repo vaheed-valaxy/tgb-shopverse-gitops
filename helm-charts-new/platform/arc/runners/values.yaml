@@ -1,15 +1,13 @@
 githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-gitops"
-
 githubConfigSecret: "shopverse-github-token"
 
 runnerScaleSetName: "shopverse-dev-runners"
+minRunners: 1
+maxRunners: 3
 
 controllerServiceAccount:
   namespace: arc-systems
   name: arc-controller-gha-rs-controller
-
-minRunners: 1
-maxRunners: 3
 
 containerMode:
   type: "dind"
