@@ -4,7 +4,7 @@ metadata:
   name: arc-runners
   namespace: argocd
 spec:
-  project: default
+  project: default          # Change this to your Project
 
   sources:
     - repoURL: ghcr.io/actions/actions-runner-controller-charts
