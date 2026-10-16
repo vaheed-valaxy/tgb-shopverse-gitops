@@ -259,9 +259,23 @@ jobs:
             "rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
             
             # -skip TargetGroupBinding
+
+      # ======================================================
+      # 9. Upload rendered manifests for deployment validation
+      # ======================================================
+
+      - name: Upload Rendered Manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-${{ inputs.component }}-${{ inputs.environment }}-${{ github.sha }}
+          path: rendered/${{ inputs.component }}/${{ inputs.component }}.yaml
+          # path: rendered/${{ inputs.component }}/
+          if-no-files-found: error
+          retention-days: 1
+
         
       # ======================================================
-      # 9. Setup Trivy
+      # 10. Setup Trivy
       # ======================================================
 
       - name: Setup Trivy
@@ -271,7 +285,7 @@ jobs:
 
 
       # ======================================================
-      # 10. Trivy Kubernetes Manifest Security Scan
+      # 11. Trivy Kubernetes Manifest Security Scan
       # ======================================================
 
       - name: Trivy - Kubernetes Manifest Security Scan
@@ -287,7 +301,7 @@ jobs:
 
 
       # ======================================================
-      # 11. Generate Trivy SARIF
+      # 12. Generate Trivy SARIF
       # ======================================================
 
       - name: Generate Trivy SARIF
@@ -304,7 +318,7 @@ jobs:
 
 
       # ======================================================
-      # 12. Check SARIF
+      # 13. Check SARIF
       # ======================================================
 
       - name: Check Trivy SARIF
@@ -326,7 +340,7 @@ jobs:
 
 
       # ======================================================
-      # 13. Upload SARIF
+      # 14. Upload SARIF
       # ======================================================
 
       - name: Upload Trivy SARIF
@@ -339,7 +353,7 @@ jobs:
 
 
       # ======================================================
-      # 14. Validation Summary
+      # 15. Validation Summary
       # ======================================================
 
       - name: Validation summary
@@ -393,12 +407,23 @@ jobs:
       - name: Checkout validated commit
         uses: actions/checkout@v6
         with:
-          # ref: ${{ github.sha }}   # EXACT validated commit
+          ref: ${{ github.sha }}   # EXACT validated commit
           fetch-depth: 0
 
 
       # ======================================================
-      # 2. Verify runner tools
+      # 2. Download rendered manifests from validation job
+      # ======================================================
+
+      - name: Download Rendered Manifests
+        uses: actions/download-artifact@v4
+        with:
+          name: rendered-${{ inputs.component }}-${{ inputs.environment }}-${{ github.sha }}
+          path: rendered/${{ inputs.component }}
+
+
+      # ======================================================
+      # 3. Verify runner tools
       # ======================================================
 
       - name: Verify runner tools
@@ -413,7 +438,7 @@ jobs:
 
 
       # ======================================================
-      # 3. Configure EKS access
+      # 4. Configure EKS access
       # ======================================================
 
       - name: Configure EKS access
@@ -432,7 +457,7 @@ jobs:
 
 
       # ======================================================
-      # 4. Verify validated commit is still current
+      # 5. Verify validated commit is still current
       # ======================================================
 
       - name: Verify validated commit is still current
@@ -458,7 +483,43 @@ jobs:
 
 
       # ======================================================
-      # 5. Start temporary Argo CD port-forward
+      # 5. Server-side Kubernetes dry-run
+      # ======================================================
+
+      - name: Kubernetes Server-Side Dry Run
+        shell: bash
+        env:
+          DEV_NAMESPACE: ${{ inputs.dev-namespace }}
+        run: |
+          set -euo pipefail
+
+          MANIFEST="rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
+
+          echo "=========================================="
+          echo "Kubernetes Server-Side Dry Run"
+          echo "Component : ${{ inputs.component }}"
+          echo "Namespace : ${DEV_NAMESPACE}"
+          echo "Manifest  : ${MANIFEST}"
+          echo "=========================================="
+
+          if [[ ! -s "${MANIFEST}" ]]; then
+            echo "::error::Rendered manifest is missing or empty."
+            exit 1
+          fi
+
+          echo "Running server-side validation..."
+
+          kubectl apply \
+            --dry-run=server \
+            --validate=strict \
+            --namespace "${DEV_NAMESPACE}" \
+            -f "${MANIFEST}"
+
+          echo "Server-side dry-run passed."
+
+
+      # ======================================================
+      # 6. Start temporary Argo CD port-forward
       # ======================================================
 
       - name: Start Argo CD port-forward
@@ -500,7 +561,7 @@ jobs:
 
 
       # ======================================================
-      # 6. Login to Argo CD & Check App
+      # 7. Login to Argo CD & Check App
       # ======================================================
 
       - name: Login to Argo CD & Check App
@@ -526,7 +587,7 @@ jobs:
 
 
       # ======================================================
-      # 7. Sync EXACT validated Git commit
+      # 8. Sync EXACT validated Git commit
       # ======================================================
 
       - name: Sync DEV application
@@ -543,7 +604,7 @@ jobs:
             
             
       # ======================================================
-      # 8. Wait for DEV application
+      # 9. Wait for DEV application
       # ======================================================
 
       - name: Wait for DEV application
@@ -561,7 +622,7 @@ jobs:
 
 
       # ======================================================
-      # 9. Show final Argo CD status
+      # 10. Show final Argo CD status
       # ======================================================
 
       - name: Show final Argo CD status
@@ -576,7 +637,7 @@ jobs:
 
 
       # ======================================================
-      # 10. Cleanup temporary port-forward
+      # 11. Cleanup temporary port-forward
       # ======================================================
 
       - name: Cleanup Argo CD port-forward
