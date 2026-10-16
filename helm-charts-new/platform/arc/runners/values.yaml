@@ -17,4 +17,16 @@ resourceMeta:
   noPermissionServiceAccount:
     annotations:
       eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-runner-role"    # ShopverseDevArcRunnerECRRole
+      
+# Node Selector & Tolerations
+template:
+  spec:
+    nodeSelector:
+      workload: ci
+
+    tolerations:
+      - key: dedicated
+        operator: Equal
+        value: ci
+        effect: NoSchedule
 
