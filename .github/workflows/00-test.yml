@@ -17,6 +17,15 @@ jobs:
           uname -a
           docker version
 
-      - name: Build test image
+      # - name: Build test image
+      #   run: |
+      #     docker build -t shopverse-arc-test:latest .
+      
+      - name: Verify Custom Runner Image
+        shell: bash
         run: |
-          docker build -t shopverse-arc-test:latest .
+          set -euo pipefail
+          aws --version
+          kubectl version --client
+          argocd version --client
+          curl --version
