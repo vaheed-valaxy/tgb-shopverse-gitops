@@ -32,8 +32,8 @@ template:
     #     value: ci
     #     effect: NoSchedule
 
-    containers:
-      - name: runner
-        image: vaheeddockerhub/vaheed-arc-runner-img:v1                # 254405569649.dkr.ecr.us-east-1.amazonaws.com/shopverse-dev-arc-runner:v1
-        imagePullPolicy: Always
+    # containers:
+    #   - name: runner
+    #     image: vaheeddockerhub/vaheed-arc-runner-img:v1                # 254405569649.dkr.ecr.us-east-1.amazonaws.com/shopverse-dev-arc-runner:v1
+    #     imagePullPolicy: Always
 
