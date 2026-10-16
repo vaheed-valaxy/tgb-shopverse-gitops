@@ -173,3 +173,21 @@ targetGroupBinding:
     targetType: "ip"
     targetGroupName: shopverse-dev-frontend-tg
     # targetGroupARN: "REPLACE_WITH_TERRAFORM_OUTPUT"
+# ---------------------------------------------------
+# Node Selectors
+# ---------------------------------------------------
+nodeSelector:
+  enabled: true
+  values:
+    workload: application
+# ---------------------------------------------------
+# Tolerations
+# ---------------------------------------------------
+tolerations:
+  enabled: true
+  values:
+    - key: dedicated
+      operator: Equal
+      value: application
+      effect: NoSchedule
+        
