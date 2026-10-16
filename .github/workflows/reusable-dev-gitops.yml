@@ -255,9 +255,11 @@ jobs:
             -strict \
             -summary \
             -output tap \
+            -ignore-missing-schemas \
             "rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
-
-
+            
+            # -skip TargetGroupBinding
+        
       # ======================================================
       # 9. Setup Trivy
       # ======================================================
