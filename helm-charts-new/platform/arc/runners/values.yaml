@@ -5,10 +5,12 @@ runnerScaleSetName: "shopverse-dev-runners"
 minRunners: 1
 maxRunners: 3
 
+# ARC Controller Service Account
 controllerServiceAccount:
   namespace: arc-systems
   name: arc-controller-gha-rs-controller
-
+  
+# To provide Docker Daemon for image building
 containerMode:
   type: "dind"
   
