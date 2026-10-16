@@ -21,8 +21,8 @@ resourceMeta:
       eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-runner-role"    # ShopverseDevArcRunnerECRRole
       
 # Node Selector & Tolerations
-# template:
-#   spec:
+template:
+  spec:
 #     nodeSelector:
 #       workload: ci
 
@@ -32,8 +32,9 @@ resourceMeta:
 #         value: ci
 #         effect: NoSchedule
 
-#     containers:
-#       - name: runner
-#         image: vaheeddockerhub/vaheed-arc-runner-img:v1                # 254405569649.dkr.ecr.us-east-1.amazonaws.com/shopverse-dev-arc-runner:v1
-#         imagePullPolicy: Always
+    containers:
+      - name: runner
+        image: vaheeddockerhub/vaheed-arc-runner-img:v1                
+        imagePullPolicy: Always
 
+# 254405569649.dkr.ecr.us-east-1.amazonaws.com/shopverse-dev-arc-runner:v1
