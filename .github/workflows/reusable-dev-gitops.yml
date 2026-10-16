@@ -362,19 +362,17 @@ jobs:
   # ==========================================================
 
   Deploy-Dev-Job:
-
     name: Deploy DEV
-
     needs:
       - GitOps-Validation-Job
-
     if: inputs.deploy-to-dev
 
-    runs-on:
-      - self-hosted
-      - Linux
-      - X64
-      - shopverse-dev
+    runs-on: shopverse-dev-runners
+    
+      # - self-hosted
+      # - Linux
+      # - X64
+      # - shopverse-dev
 
     # environment:
     #   name: dev
