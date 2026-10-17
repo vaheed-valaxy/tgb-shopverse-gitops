@@ -1,5 +1,5 @@
 githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-gitops"
-githubConfigSecret: "shopverse-github-token"
+githubConfigSecret: "shopverse-gitops-gha-arc-token"
 
 runnerScaleSetName: "shopverse-dev-runners"
 minRunners: 1
