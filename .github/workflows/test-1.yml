@@ -1,4 +1,4 @@
-name: ARC Docker Build Test
+name: Test
 
 on:
   workflow_dispatch:
@@ -12,12 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Verify runner
-        run: |
-          echo "ARC runner picked up the job"
-          uname -a
-          docker version
 
       - name: print ARN
         run: |
