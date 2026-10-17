@@ -1,0 +1,14 @@
+name: Test Job
+on:
+  workflow_dispatch:
+  
+env:
+ AWS_ARN: ${{ vars.AWS_ARN }}
+ 
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print ARN
+        run: echo "AWS_ARN = $AWS_ARN"
