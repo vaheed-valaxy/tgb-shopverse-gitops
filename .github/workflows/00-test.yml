@@ -17,9 +17,9 @@ jobs:
           uname -a
           docker version
 
-      # - name: Build test image
-      #   run: |
-      #     docker build -t shopverse-arc-test:latest .
+      - name: Build test image
+        run: |
+          docker build -t shopverse-arc-test:latest .
       
       - name: Verify Custom Runner Image
         shell: bash
