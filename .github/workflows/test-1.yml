@@ -1,0 +1,27 @@
+name: ARC Docker Build Test
+
+on:
+  workflow_dispatch:
+
+env:
+  RUNS_ON: ubuntu-latest
+  AWS_ARN: RUNS_ON == 'ubuntu-latest' && vars.AWS_ARN || ''
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Verify runner
+        run: |
+          echo "ARC runner picked up the job"
+          uname -a
+          docker version
+
+      - name: print ARN
+        run: |
+          echo "AWS_ARN: $AWS_ARN"
+      
+
+      
