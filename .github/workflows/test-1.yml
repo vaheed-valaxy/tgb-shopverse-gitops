@@ -5,7 +5,8 @@ on:
 
 env:
   RUNS_ON: ubuntu-latest
-  AWS_ARN: $RUNS_ON == 'ubuntu-latest' && vars.AWS_ARN || ''
+  AWS_ARN: vars.AWS_ARN
+  # AWS_ARN: $RUNS_ON == 'ubuntu-latest' && vars.AWS_ARN || ''
 
 jobs:
   docker-build:
