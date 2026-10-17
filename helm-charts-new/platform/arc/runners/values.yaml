@@ -18,7 +18,7 @@ containerMode:
 resourceMeta:
   noPermissionServiceAccount:
     annotations:
-      eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-runner-role"    # ShopverseDevArcRunnerECRRole
+      eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-arc-runner-role"    # ShopverseDevArcRunnerECRRole
       
 # Node Selector & Tolerations
 template:
