@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  RUNS_ON: ubuntu-latest
+  RUNS_ON: shopverse-dev   # ubuntu-latest
 
 jobs:
   set-variables-job:
