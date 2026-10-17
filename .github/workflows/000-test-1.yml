@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: set variables
         run: |
-          AWS_ARN = $($RUNS_ON == "ubuntu-latest" ? ${{ vars.AWS_ARN }} : '')
+          AWS_ARN = $(($RUNS_ON == "ubuntu-latest" ? ${{ vars.AWS_ARN }} : ''))
           echo "aws-arn=$AWS_ARN" >> "$GITHUB_ENV"
           
   test:
