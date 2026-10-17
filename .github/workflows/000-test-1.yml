@@ -15,7 +15,6 @@ jobs:
         env:
           AWS_ARN: ${{ env.RUNS_ON == 'ubuntu-latest' && vars.AWS_ARN || '' }}
         run: |
-          # AWS_ARN = $($RUNS_ON == "ubuntu-latest" ? ${{ vars.AWS_ARN }} : '')
           echo "aws-arn=$AWS_ARN" >> "$GITHUB_ENV"
           
       - name: Print ARN
