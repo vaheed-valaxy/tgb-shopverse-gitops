@@ -3,9 +3,19 @@ on:
   workflow_dispatch:
   
 env:
+ RUNS_ON: ubuntu-latest
  AWS_ARN: ${{ vars.AWS_ARN }}
  
 jobs:
+
+  set-variables-job:
+    runs-on: $RUNS_ON
+    steps:
+      - name: set variables
+        run: |
+          AWS_ARN = $RUNS_ON == "ubuntu-latest" && ${{ vars.AWS_ARN }} || '' 
+          echo "aws-arn=$AWS_ARN"
+          
   test:
     runs-on: ubuntu-latest
 
