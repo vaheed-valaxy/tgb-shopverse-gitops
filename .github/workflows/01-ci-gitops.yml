@@ -171,6 +171,7 @@ jobs:
 
       deploy-to-dev: true
       eks-cluster-name: 'shopverse-dev-eks-cluster'
+      dev-namespace: "shopverse-${{ needs.Detect-Changes-Job.outputs.environment }}"
       argocd-host: '127.0.0.1'
       argocd-port: '8090'                     # port-forward purpose
       argocd-app: "shopverse-${{ needs.Detect-Changes-Job.outputs.environment }}-${{ needs.Detect-Changes-Job.outputs.component }}"
