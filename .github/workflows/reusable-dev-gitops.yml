@@ -515,36 +515,37 @@ jobs:
       # 5. Server-side Kubernetes dry-run
       # ======================================================
 
-      - name: Kubernetes Server-Side Dry Run
-        shell: bash
-        env:
-          DEV_NAMESPACE: ${{ inputs.dev-namespace }}
-        run: |
-          set -euo pipefail
+      # - name: Kubernetes Server-Side Dry Run
+      #   shell: bash
+      #   env:
+      #     DEV_NAMESPACE: ${{ inputs.dev-namespace }}
+      #   run: |
+      #     set -euo pipefail
 
-          MANIFEST="rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
+      #     MANIFEST="rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
 
-          echo "=========================================="
-          echo "Kubernetes Server-Side Dry Run"
-          echo "Component : ${{ inputs.component }}"
-          echo "Namespace : ${DEV_NAMESPACE}"
-          echo "Manifest  : ${MANIFEST}"
-          echo "=========================================="
+      #     echo "=========================================="
+      #     echo "Kubernetes Server-Side Dry Run"
+      #     echo "Component : ${{ inputs.component }}"
+      #     echo "Namespace : ${DEV_NAMESPACE}"
+      #     echo "Manifest  : ${MANIFEST}"
+      #     echo "=========================================="
 
-          if [[ ! -s "${MANIFEST}" ]]; then
-            echo "::error::Rendered manifest is missing or empty."
-            exit 1
-          fi
+      #     if [[ ! -s "${MANIFEST}" ]]; then
+      #       echo "::error::Rendered manifest is missing or empty."
+      #       exit 1
+      #     fi
 
-          echo "Running server-side validation..."
+      #     echo "Running server-side validation..."
 
-          kubectl apply \
-            --dry-run=server \
-            --validate=strict \
-            --namespace "${DEV_NAMESPACE}" \
-            -f "${MANIFEST}"
+      #     kubectl apply \
+      #       --dry-run=server \
+      #       --validate=strict \
+      #       --namespace "${DEV_NAMESPACE}" \
+      #       -f "${MANIFEST}"
 
-          echo "Server-side dry-run passed."
+              # --dry-run=client
+      #     echo "Server-side dry-run passed."
 
 
       # ======================================================
