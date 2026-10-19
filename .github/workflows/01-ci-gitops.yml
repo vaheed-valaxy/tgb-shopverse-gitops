@@ -31,6 +31,9 @@ permissions:
   security-events: write
   id-token: write
 
+env:
+  RUNS_ON: ubuntu-latest
+
 
 jobs:
 
@@ -155,15 +158,34 @@ jobs:
         
           done < <(git diff --name-only "$DIFF_BASE" "$DIFF_HEAD")
 
+
   # ============================================================
-  # 2. Run reusable validation workflow
+  # 2. Set Variables
+  # ============================================================
+  Set-Variables-Job:
+    name: Set Variables
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.set-runner.outputs.runner }}
+    steps:
+      - name: Set runner
+        id: set-runner
+        run: |
+          echo "runner=$RUNS_ON" >> "$GITHUB_OUTPUT"
+  
+
+  # ============================================================
+  # 3. Run reusable validation workflow
   # ============================================================
 
   Dev-GitOps-Job:
     if: ${{ needs.Detect-Changes-Job.outputs.environment == 'dev' }}
-    needs: Detect-Changes-Job
+    needs: 
+      - Detect-Changes-Job
+      - Set-Variables-Job
     uses: ./.github/workflows/reusable-dev-gitops.yml
     with:
+      runner: ${{ needs.Set-Variables-Job.outputs.runner }}
       component: ${{ needs.Detect-Changes-Job.outputs.component }}
       environment: ${{ needs.Detect-Changes-Job.outputs.environment }}
       chart-path: ${{ needs.Detect-Changes-Job.outputs.chart_path }}
@@ -182,9 +204,12 @@ jobs:
 
   Qa-GitOps-Job:
     if: needs.Detect-Changes-Job.outputs.environment == 'qa'
-    needs: Detect-Changes-Job
+    needs: 
+      - Detect-Changes-Job
+      - Set-Variables-Job
     uses: ./.github/workflows/reusable-qa-gitops-pr.yml
     with:
+      runner: ${{ needs.Set-Variables-Job.outputs.runner }}
       component: ${{ needs.Detect-Changes-Job.outputs.component }}
       environment: ${{ needs.Detect-Changes-Job.outputs.environment }}
       chart-path: ${{ needs.Detect-Changes-Job.outputs.chart_path }}
@@ -193,9 +218,12 @@ jobs:
 
   Prod-GitOps-Job:
     if: needs.Detect-Changes-Job.outputs.environment == 'prod'
-    needs: Detect-Changes-Job
+    needs: 
+      - Detect-Changes-Job
+      - Set-Variables-Job
     uses: ./.github/workflows/reusable-prod-gitops-pr.yml
     with:
+      runner: ${{ needs.Set-Variables-Job.outputs.runner }}
       component: ${{ needs.Detect-Changes-Job.outputs.component }}
       environment: ${{ needs.Detect-Changes-Job.outputs.environment }}
       chart-path: ${{ needs.Detect-Changes-Job.outputs.chart_path }}
