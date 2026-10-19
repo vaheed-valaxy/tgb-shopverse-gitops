@@ -44,7 +44,6 @@ jobs:
   GitOps-Validation:
 
     name: "${{ inputs.component }} - ${{ inputs.environment }} - Helm + Kubernetes Security"
-
     runs-on: ${{ inputs.runner }}
 
     permissions:
@@ -232,17 +231,11 @@ jobs:
           SARIF_FILE="trivy-k8s-${{ inputs.component }}-${{ inputs.environment }}.sarif"
 
           if [ -s "$SARIF_FILE" ]; then
-
             echo "exists=true" >> "$GITHUB_OUTPUT"
-
             echo "✅ SARIF file exists."
-
           else
-
             echo "exists=false" >> "$GITHUB_OUTPUT"
-
             echo "⚠️ SARIF file does not exist or is empty."
-
           fi
 
 
