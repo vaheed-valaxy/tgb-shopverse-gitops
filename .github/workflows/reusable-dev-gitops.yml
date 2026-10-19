@@ -404,6 +404,13 @@ jobs:
           ref: ${{ github.sha }}   # EXACT validated commit
           fetch-depth: 0
 
+      - name: Show Checkout Commit to deploy to dev
+        env: 
+          CHECKEDOUT_COMMIT: ${{ github.sha }}
+        run: |
+          echo "Checkedout Commit to deploy to dev:"
+          echo $CHECKEDOUT_COMMIT
+
 
       # ======================================================
       # 2. Download rendered manifests from validation job
@@ -473,7 +480,7 @@ jobs:
             exit 1
           fi
 
-          echo "Commit is still current."
+          echo "Commit is still current...Proceeding to Deploy to DEV"
 
 
       # ======================================================
