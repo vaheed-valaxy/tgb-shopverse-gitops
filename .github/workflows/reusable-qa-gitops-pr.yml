@@ -61,7 +61,7 @@ jobs:
       - name: Checkout GitOps Repository
         uses: actions/checkout@v6
         with:
-          # ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
 
