@@ -23,4 +23,4 @@ jobs:
           git fetch origin main
           echo "GIT Rev Parse: $(git rev-parse HEAD)"
 
-          $(git rev-parse origin/main)
+          # $(git rev-parse origin/main)
