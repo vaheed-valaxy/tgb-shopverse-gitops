@@ -157,8 +157,8 @@ jobs:
 
           git log -1 --oneline
 
-          echo "GITHUB_SHA: ${GITHUB_SHA}"
-          echo "GITHUB_REF: ${GITHUB_REF}"
+          echo "GITHUB_SHA: ${GITHUB_SHA}"       # Commit ID
+          echo "GITHUB_REF: ${GITHUB_REF}"       # Branch Name
 
 
       # ======================================================
@@ -194,7 +194,7 @@ jobs:
             -f "${{ inputs.values-file }}" \
             > "rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
 
-          echo "Helm rendering completed."
+          echo "*** Helm rendering completed successfully... ***"
 
 
       # ======================================================
