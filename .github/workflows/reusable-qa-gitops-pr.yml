@@ -78,6 +78,7 @@ jobs:
         run: |
           echo "Chart_Path: ${{ inputs.chart-path }}"
           # rm -rf "${{ inputs.environment }}/${{ inputs.component }}/charts"
+          
           helm dependency build "${{ inputs.chart-path }}"    #./helm-charts-new/${{ inputs.component }}
 
 
