@@ -265,6 +265,8 @@ jobs:
 
             # -kubernetes-version "${K8S_VERSION}" 
             # -skip TargetGroupBinding
+            # -output text pretty
+            
 
       # ======================================================
       # 9. Upload rendered manifests for deployment validation
