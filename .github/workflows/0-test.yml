@@ -12,7 +12,7 @@ jobs:
           
       - name: Check Latest Commit
         env:
-          COMMIIT_1: ${{ github.sha }}
+          COMMIT_1: ${{ github.sha }}
         run: |
           echo "github.sha: $COMMIT_1"
 
