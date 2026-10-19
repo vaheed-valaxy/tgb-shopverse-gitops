@@ -366,10 +366,10 @@ jobs:
           echo "${{ inputs.environment }} GitOps validation PASSED"
           echo "--------------------------------------------------"
 
-          echo "Component: ${{ inputs.component }}"
+          echo "Component  : ${{ inputs.component }}"
           echo "Environment: ${{ inputs.environment }}"
-          echo "Commit: ${GITHUB_SHA}"
-          echo "Branch: ${GITHUB_REF_NAME}"
+          echo "Commit     : ${GITHUB_SHA}"
+          echo "Branch     : ${GITHUB_REF_NAME}"
 
           echo "LATEST COMMIT   : ${GITHUB_SHA}" 
           echo "VALIDTAED COMMIT: ${GITHUB_SHA}"
