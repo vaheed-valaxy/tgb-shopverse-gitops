@@ -34,11 +34,30 @@ permissions:
 env:
   RUNS_ON: ubuntu-latest
 
-
 jobs:
 
   # ============================================================
-  # 1. Find changed values files
+  # 1. Set Variables
+  # ============================================================
+  
+  Set-Variables-Job:
+    name: Set Variables
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.set-variables.outputs.runner }}
+      aws-ecr-role-arn: ${{ steps.set-variables.outputs.aws-ecr-role-arn }}
+    steps:
+      - name: Set Variables
+        id: set-variables
+        env:
+          AWS_ECR_ROLE_ARN: ${{ env.RUNS_ON == 'ubuntu-latest' && vars.AWS_ECR_ROLE_ARN || '' }}
+        run: |
+          echo "runner=$RUNS_ON" >> "$GITHUB_OUTPUT"
+          echo "aws-ecr-role-arn=$AWS_ECR_ROLE_ARN" >> "$GITHUB_OUTPUT"
+          
+
+  # ============================================================
+  # 2. Find changed values files
   # ============================================================
 
   Detect-Changes-Job:
@@ -158,22 +177,7 @@ jobs:
         
           done < <(git diff --name-only "$DIFF_BASE" "$DIFF_HEAD")
 
-
-  # ============================================================
-  # 2. Set Variables
-  # ============================================================
-  Set-Variables-Job:
-    name: Set Variables
-    runs-on: ubuntu-latest
-    outputs:
-      runner: ${{ steps.set-runner.outputs.runner }}
-    steps:
-      - name: Set runner
-        id: set-runner
-        run: |
-          echo "runner=$RUNS_ON" >> "$GITHUB_OUTPUT"
   
-
   # ============================================================
   # 3. Run reusable validation workflow
   # ============================================================
@@ -231,5 +235,5 @@ jobs:
 
       aws-account-id: '254405569649'
       aws-region: us-east-1
-      aws-ecr-role-arn: ${{ vars.AWS_ECR_ROLE_ARN }}
+      aws-ecr-role-arn: ${{ needs.Set-Variables-Job.outputs.aws-ecr-role-arn }} 
       aws-prod-ecr-repo: shopverse/${{ needs.Detect-Changes-Job.outputs.component }}
