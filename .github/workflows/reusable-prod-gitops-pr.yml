@@ -43,8 +43,9 @@ on:
 
       aws-ecr-role-arn:
         description: "AWS ECR role for PROD"
-        required: true
+        required: false
         type: string
+        default: ''
 
       aws-prod-ecr-repo:
         description: "AWS PROD ECR Repo"
@@ -284,6 +285,7 @@ jobs:
       # ============================================================
       
       - name: Configure AWS credentials
+        if: inputs.aws-ecr-role-arn != ''
         uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
           role-to-assume: ${{ inputs.aws-ecr-role-arn }}
