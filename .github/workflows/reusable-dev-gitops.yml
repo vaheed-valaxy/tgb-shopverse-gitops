@@ -494,24 +494,28 @@ jobs:
 
       - name: Verify validated commit is still current
         shell: bash
+        env:
+          VALIDATED_COMMIT: ${{ needs.GitOps-Validation-Job.outputs.validated-commit }}
         run: |
           set -euo pipefail
 
+          echo "Fetching the Latest Commit..."
+
           git fetch origin main
 
-          VALIDATED_SHA="${GITHUB_SHA}"
-          CURRENT_MAIN_SHA="$(git rev-parse origin/main)"
+          LATEST_COMMIT="$(git rev-parse origin/main)"
 
-          echo "Validated SHA    : ${VALIDATED_SHA}"
-          echo "Current Main SHA : ${CURRENT_MAIN_SHA}"
+          echo "VALIDATED COMMIT : ${VALIDATED_COMMIT}"
+          echo "LATEST COMMIT    : ${LATEST_COMMIT}"
 
-          if [[ "${VALIDATED_SHA}" != "${CURRENT_MAIN_SHA}" ]]; then
+          if [[ "${VALIDATED_COMMIT}" != "${LATEST_COMMIT}" ]]; then
             echo "::error::A newer GitOps commit exists."
             echo "::error::Refusing to deploy stale validated commit."
             exit 1
           fi
 
-          echo "Commit is still current...Proceeding to Deploy to DEV"
+          echo "Fetched current Commit is still Latest..."
+          echo "No more Commit Checks after this...Proceeding to Deploy to DEV"
 
 
       # ======================================================
