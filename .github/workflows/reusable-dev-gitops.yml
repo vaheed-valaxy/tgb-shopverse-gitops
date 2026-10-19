@@ -569,16 +569,11 @@ jobs:
           echo "Waiting for Argo CD..."
 
           for i in {1..30}; do
-
             if curl -fsS "http://${ARGOCD_HOST}:${ARGOCD_PORT}/healthz" >/dev/null 2>&1; then
-              
-              echo "Argo CD is reachable."
-
+              echo "*** Argo CD is reachable...! ***"
               exit 0
             fi
-
             sleep 2
-
           done
 
           echo "::error::Argo CD port-forward did not become ready."
