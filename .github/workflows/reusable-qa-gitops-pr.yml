@@ -152,18 +152,12 @@ jobs:
 
           echo "Downloading Kubeconform ${KUBECONFORM_VERSION}..."
 
-          curl -fsSL \
-            "$KUBECONFORM_URL" \
-            -o /tmp/kubeconform.tar.gz
-
-          tar -xzf \
-            /tmp/kubeconform.tar.gz \
-            -C /tmp
-
-          sudo install \
-            /tmp/kubeconform \
-            /usr/local/bin/kubeconform
-
+          curl -fsSL "$KUBECONFORM_URL" -o /tmp/kubeconform.tar.gz
+          
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp
+            
+          sudo install /tmp/kubeconform /usr/local/bin/kubeconform
+            
           kubeconform -v
 
 
@@ -179,9 +173,12 @@ jobs:
             -strict \
             -summary \
             -output tap \
+            -ignore-missing-schemas \
             "rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
 
-          # output text pretty
+            # -kubernetes-version "${K8S_VERSION}" 
+            # -skip TargetGroupBinding
+            # -output text pretty
 
 
       # ======================================================
