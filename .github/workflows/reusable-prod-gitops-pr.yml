@@ -82,7 +82,7 @@ jobs:
       - name: Checkout GitOps Repository
         uses: actions/checkout@v6
         with:
-          # ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
 
@@ -99,6 +99,7 @@ jobs:
         run: |
           echo "Chart_Path: ${{ inputs.chart-path }}"
           # rm -rf "${{ inputs.environment }}/${{ inputs.component }}/charts"
+          
           helm dependency build "${{ inputs.chart-path }}"    #./helm-charts-new/${{ inputs.component }}
 
 
@@ -172,18 +173,12 @@ jobs:
 
           echo "Downloading Kubeconform ${KUBECONFORM_VERSION}..."
 
-          curl -fsSL \
-            "$KUBECONFORM_URL" \
-            -o /tmp/kubeconform.tar.gz
-
-          tar -xzf \
-            /tmp/kubeconform.tar.gz \
-            -C /tmp
-
-          sudo install \
-            /tmp/kubeconform \
-            /usr/local/bin/kubeconform
-
+          curl -fsSL "$KUBECONFORM_URL" -o /tmp/kubeconform.tar.gz
+            
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp
+            
+          sudo install /tmp/kubeconform /usr/local/bin/kubeconform
+            
           kubeconform -v
 
 
@@ -201,7 +196,9 @@ jobs:
             -output tap \
             "rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
 
-          # output text pretty
+            # -kubernetes-version "${K8S_VERSION}" 
+            # -skip TargetGroupBinding
+            # -output text pretty
 
 
       # ======================================================
