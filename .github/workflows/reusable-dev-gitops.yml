@@ -1,5 +1,5 @@
 name: Reusable - DEV GitOps Helm + Kubernetes Security
-
+# ${GITHIB_SHA} ${{github.sha}} $(git rev-parse origin/main) refers to latest commit id
 on:
   workflow_call:
 
@@ -110,6 +110,9 @@ jobs:
       contents: read
       security-events: write
 
+    outputs:
+      validated-commit: ${{ steps.validated-commit.outputs.validated-commit }}
+
     steps:
 
       # ======================================================
@@ -121,7 +124,11 @@ jobs:
         with:
           fetch-depth: 0
 
-
+      - name: Print Latest Commit ID
+        run: |
+          echo "Latest Commit ID: ${GITHUB_SHA}"
+          
+        
       # ======================================================
       # 2. Setup Helm
       # ======================================================
@@ -363,6 +370,19 @@ jobs:
           echo "Environment: ${{ inputs.environment }}"
           echo "Commit: ${GITHUB_SHA}"
           echo "Branch: ${GITHUB_REF_NAME}"
+          
+
+      # ======================================================
+      # 16. Print and Output validated Commit ID
+      # ======================================================
+      
+      - name: Print & Output validated Commit ID
+        id: validated-commit
+        run: |
+          echo "Latest Commit ID: ${GITHUB_SHA}" 
+          echo "Validated Commit ID: ${GITHUB_SHA}"
+          
+          echo "validated-commit=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
 
   # ==========================================================
@@ -371,9 +391,8 @@ jobs:
 
   Deploy-Dev-Job:
     name: Deploy DEV
-    needs:
-      - GitOps-Validation-Job
     if: inputs.deploy-to-dev
+    needs: GitOps-Validation-Job
 
     runs-on: shopverse-dev-runners
     
@@ -398,19 +417,31 @@ jobs:
       # 1. Checkout Gitops repo
       # ======================================================
 
-      - name: Checkout validated commit
+      - name: Checkout Code
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.sha }}   # EXACT validated commit
+          # ref: ${{ github.sha }}   # EXACT validated commit
           fetch-depth: 0
 
-      - name: Show Checkout Commit to deploy to dev
-        env: 
-          CHECKEDOUT_COMMIT: ${{ github.sha }}
+      - name: Ensure validated commit is still Latest commit
+        shell: bash
+        env:
+          VALIDATED_COMMIT: ${{ needs.GitOps-Validation-Job.outputs.validated-commit }}
+          LATEST_COMMIT: ${{ github.sha }}             # ${GITHUB_SHA}
         run: |
-          echo "Checkedout Commit to deploy to dev:"
-          echo $CHECKEDOUT_COMMIT
-
+          echo "Checking Validated Commit is still Latest after checkout..."
+          
+          echo "VALIDATED COMMIT: ${VALIDATED_COMMIT}"
+          echo "LATEST COMMIT   : ${LATEST_COMMIT}"
+      
+          if [[ "${VALIDATED_COMMIT}" != "${LATEST_COMMIT}" ]]; then
+            echo "::error::A newer GitOps commit exists."
+            echo "::error::Refusing to deploy stale validated commit."
+            exit 1
+          fi
+          
+          echo "Commit is still Latest...Proceeding to Deploy to DEV"
+          
 
       # ======================================================
       # 2. Download rendered manifests from validation job
