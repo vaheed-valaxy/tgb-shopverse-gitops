@@ -111,7 +111,7 @@ jobs:
       security-events: write
 
     outputs:
-      validated-commit: ${{ steps.validated-commit.outputs.validated-commit }}
+      validated-commit: ${{ steps.validation-summary.outputs.validated-commit }}
 
     steps:
 
@@ -358,6 +358,7 @@ jobs:
       # ======================================================
 
       - name: Validation summary
+        id: validation-summary
         shell: bash
         run: |
           set -euo pipefail
@@ -370,18 +371,10 @@ jobs:
           echo "Environment: ${{ inputs.environment }}"
           echo "Commit: ${GITHUB_SHA}"
           echo "Branch: ${GITHUB_REF_NAME}"
-          
 
-      # ======================================================
-      # 16. Print and Output validated Commit ID
-      # ======================================================
-      
-      - name: Print & Output validated Commit ID
-        id: validated-commit
-        run: |
-          echo "Latest Commit ID: ${GITHUB_SHA}" 
-          echo "Validated Commit ID: ${GITHUB_SHA}"
-          
+          echo "LATEST COMMIT   : ${GITHUB_SHA}" 
+          echo "VALIDTAED COMMIT: ${GITHUB_SHA}"
+
           echo "validated-commit=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
 
@@ -440,7 +433,7 @@ jobs:
             exit 1
           fi
           
-          echo "Commit is still Latest...Proceeding to Deploy to DEV"
+          echo "Commit is still Latest...Proceeding...!"
           
 
       # ======================================================
@@ -515,7 +508,7 @@ jobs:
           fi
 
           echo "Fetched current Commit is still Latest..."
-          echo "No more Commit Checks after this...Proceeding to Deploy to DEV"
+          echo "No more Commit Checks here after...Proceeding to Deploy to DEV...!"
 
 
       # ======================================================
