@@ -1,0 +1,22 @@
+name: Test Latest commit ID
+on:
+  workflow_dispatch:
+jobs:
+  check-latest-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          
+      - name: Check Latest Commit
+        env:
+          COMMIIT_1: ${{ github.sha }}
+        run: |
+          echo "github.sha: $COMMIT_1"
+
+          echo "GITHUB_SHA: ${GITHUB_SHA}"
+
+          git fetch origin/main
+          echo "GIT Rev Parse: $(git rev-parse origin/main)"
