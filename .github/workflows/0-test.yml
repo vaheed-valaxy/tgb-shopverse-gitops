@@ -1,6 +1,7 @@
 name: Test Latest commit ID
 on:
   workflow_dispatch:
+permissions: read-all
 jobs:
   check-latest-commit:
     runs-on: ubuntu-latest
