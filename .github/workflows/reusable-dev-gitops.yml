@@ -257,7 +257,8 @@ jobs:
             -output tap \
             -ignore-missing-schemas \
             "rendered/${{ inputs.component }}/${{ inputs.component }}.yaml"
-            
+
+            # -kubernetes-version "${K8S_VERSION}" 
             # -skip TargetGroupBinding
 
       # ======================================================
