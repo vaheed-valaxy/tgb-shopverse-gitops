@@ -20,5 +20,5 @@ jobs:
 
           echo "GITHUB_SHA: ${GITHUB_SHA}"
 
-          git fetch origin/main
+          git fetch origin main
           echo "GIT Rev Parse: $(git rev-parse origin/main)"
