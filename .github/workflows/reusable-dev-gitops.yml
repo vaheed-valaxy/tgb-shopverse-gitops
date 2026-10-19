@@ -617,13 +617,14 @@ jobs:
         shell: bash
         env:
           ARGOCD_APP: ${{ inputs.argocd-app }}
+          VALIDATED_COMMIT: ${{ needs.GitOps-Validation-Job.outputs.validated-commit }}
         run: |
           set -euo pipefail
 
           echo "Deploying validated GitOps commit:"
-          echo "${GITHUB_SHA}"
+          echo "${VALIDATED_COMMIT}"
 
-          argocd app sync "${ARGOCD_APP}" --revision "${GITHUB_SHA}"
+          argocd app sync "${ARGOCD_APP}" --revision "${VALIDATED_COMMIT}"
             
             
       # ======================================================
