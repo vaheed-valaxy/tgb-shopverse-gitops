@@ -1,5 +1,9 @@
 name: Reusable - DEV GitOps Helm + Kubernetes Security
-# ${GITHIB_SHA} ${{github.sha}} $(git rev-parse origin/main) refers to latest commit id
+
+# ${GITHIB_SHA} ${{github.sha}} -- refers to latest commit id
+# git rev-parse HEAD -- gives you latest commit id present on local repo
+# git fetch origin main; $(git rev-parse origin/main) -- gives you latest commit present on remote git repo in main branch
+
 on:
   workflow_call:
 
