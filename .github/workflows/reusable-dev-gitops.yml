@@ -590,7 +590,7 @@ jobs:
       - name: Login to Argo CD & Check App
         shell: bash
         env:
-          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}       # Argo CD CLI uses this token for authentication. The identity is the Argo CD account/project role that owns this token.
+          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}     # Argo CD CLI uses this token for authentication. The identity is the Argo CD account/project role that owns this token.
           ARGOCD_HOST: ${{ env.ARGOCD_HOST }}
           ARGOCD_PORT: ${{ env.ARGOCD_PORT }}
           ARGOCD_APP: ${{ inputs.argocd-app }}  
