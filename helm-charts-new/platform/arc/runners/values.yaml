@@ -1,4 +1,6 @@
-githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-gitops"
+# githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-gitops"
+
+githubConfigUrl: "https://github.com/vaheed-valaxy"
 githubConfigSecret: "shopverse-gitops-gha-arc-token"
 
 runnerScaleSetName: "shopverse-dev-runners"
