@@ -3,8 +3,8 @@
   - **Repositories**
     - `tgb-shopverse-gitops` (Select more than one repo if you need this token for)
   - **Permissions**
-    - `Administration` : Read and write
-    - `Metadata`: Read
+    - `Administration` : ***Read and write***
+    - `Metadata`: ***Read***
   
 ## 2. Create Secret
 ```bash
