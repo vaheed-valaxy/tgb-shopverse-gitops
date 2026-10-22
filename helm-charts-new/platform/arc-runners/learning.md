@@ -1,12 +1,12 @@
-## Permissions for creating token
+## 1. Permissions for creating token
 - **Fine Grained Token**
   - **Repositories**
-    - tgb-shopverse-gitops (Select more than one if you need)
+    - tgb-shopverse-gitops (Select more than one repo if you need this token for)
   - **Permissions**
     - `Administration` : Read and write
     - `Metadata`: Read
   
-## Create Secret
+## 2. Create Secret
 ```bash
 kubectl create secret generic shopverse-gitops-gha-arc-token \
   -n arc-runners \
