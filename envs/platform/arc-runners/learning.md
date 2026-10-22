@@ -11,7 +11,7 @@
   
 ## 2. Create Secret
 ```bash
-kubectl create secret generic shopverse-gitops-gha-arc-token \
+kubectl create secret generic shopverse-gha-arc-token \
   -n arc-runners \
   --from-literal=github_token='YOUR_GITHUB_TOKEN'
 ```
