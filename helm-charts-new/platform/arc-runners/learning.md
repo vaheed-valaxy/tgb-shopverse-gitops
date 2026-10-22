@@ -1,4 +1,4 @@
-## 1. Permissions for creating github token
+## 1. Permissions for creating github token (Repository Level)
 - **Fine Grained Token**
   - **Repositories**
     - tgb-shopverse-gitops (Select more than one repo if you need this token for)
