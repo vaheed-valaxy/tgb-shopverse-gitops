@@ -2,7 +2,7 @@ githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-backend"
 
 githubConfigSecret: "shopverse-gitops-gha-arc-token"
 
-runnerScaleSetName: "shopverse-dev-runners"
+runnerScaleSetName: "shopverse-backend-runners"
 minRunners: 0
 maxRunners: 3
 
