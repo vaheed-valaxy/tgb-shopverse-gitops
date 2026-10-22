@@ -1,10 +1,10 @@
 ## 1. Permissions for creating github token (Repository Level)
 - **Fine Grained Token**
   - **Repositories**
-    - tgb-shopverse-infra
-    - tgb-shopverse-frontend
-    - tgb-shopverse-backend
-    - tgb-shopverse-gitops
+    - `tgb-shopverse-infra`
+    - `tgb-shopverse-frontend`
+    - `tgb-shopverse-backend`
+    - `tgb-shopverse-gitops`
   - **Permissions**
     - `Administration` : Read and write
     - `Metadata`: Read
