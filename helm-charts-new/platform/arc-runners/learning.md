@@ -1,5 +1,5 @@
 ## Permissions for creating token
-- Fine Grained Token
+- **Fine Grained Token**
   - **Repositories**
     - tgb-shopverse-gitops (Select more than one if you need)
   - **Permissions**
