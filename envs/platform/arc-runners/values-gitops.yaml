@@ -1,0 +1,54 @@
+githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-gitops"
+
+githubConfigSecret: "shopverse-gitops-gha-arc-token"
+
+runnerScaleSetName: "shopverse-dev-runners"
+minRunners: 1
+maxRunners: 3
+
+# To provide Docker Daemon for image building
+containerMode:
+  type: "dind"
+
+# ARC Controller Service Account
+controllerServiceAccount:
+  namespace: arc-systems
+  name: arc-controller-gha-rs-controller
+    
+# ARC Runner Service Account
+resourceMeta:
+  noPermissionServiceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-arc-runner-role"    # ShopverseDevArcRunnerECRRole
+      
+# Node Selector & Tolerations
+template:
+  spec:
+#     nodeSelector:
+#       workload: ci
+
+#     tolerations:
+#       - key: dedicated
+#         operator: Equal
+#         value: ci
+#         effect: NoSchedule
+
+    containers:
+      - name: runner
+        image: vaheeddockerhub/vaheed-arc-runner-img:v1                
+        imagePullPolicy: Always
+        command: ["/home/runner/run.sh"]
+
+        # command: ["bash", "/home/runner/run.sh"]               # Working
+        # command:                                               # Working
+        #   - /home/runner/run.sh
+
+        # resources:
+        #   requests:
+        #     cpu: 250m
+        #     memory: 256Mi
+        #   limits:
+        #     cpu: 500m
+        #     memory: 512Mi
+
+# 254405569649.dkr.ecr.us-east-1.amazonaws.com/shopverse-dev-arc-runner:v1
