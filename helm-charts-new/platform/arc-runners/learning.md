@@ -1,10 +1,10 @@
 ## Permissions for creating token
 - Fine Grained Token
-  - Repositories
+  - **Repositories**
     - tgb-shopverse-gitops (Select more than one if you need)
-  - Permissions
-    - Administration : Read and write
-    - Metadata: Read
+  - **Permissions**
+    - `Administration` : Read and write
+    - `Metadata`: Read
   
 ## Create Secret
 ```bash
