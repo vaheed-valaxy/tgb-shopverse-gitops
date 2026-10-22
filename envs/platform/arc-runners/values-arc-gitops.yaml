@@ -3,7 +3,7 @@ githubConfigUrl: "https://github.com/vaheed-valaxy/tgb-shopverse-gitops"
 githubConfigSecret: "shopverse-gha-arc-token"
 
 runnerScaleSetName: "shopverse-gitops-runners"
-minRunners: 1
+minRunners: 0
 maxRunners: 3
 
 # To provide Docker Daemon for image building
