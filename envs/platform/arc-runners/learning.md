@@ -6,8 +6,8 @@
     - `tgb-shopverse-backend`
     - `tgb-shopverse-gitops`
   - **Permissions**
-    - `Administration` : Read and write
-    - `Metadata`: Read
+    - `Administration` : ***Read and write***
+    - `Metadata`: ***Read***
   
 ## 2. Create Secret
 ```bash
