@@ -394,7 +394,7 @@ jobs:
     if: inputs.deploy-to-dev
     needs: GitOps-Validation-Job
 
-    runs-on: shopverse-dev-runners
+    runs-on: ${{ inputs.runner }}
     
       # - self-hosted
       # - Linux
@@ -499,7 +499,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "Fetching the Latest Commit..."
+          echo "Fetching the Latest Commit from remote Repo..."
 
           git fetch origin main
 
@@ -514,7 +514,7 @@ jobs:
             exit 1
           fi
 
-          echo "Fetched current Commit is still Latest..."
+          echo "Fetched Current Commit is still Latest Commit..."
           echo "No more Commit Checks here after...Proceeding to Deploy to DEV...!"
 
 
