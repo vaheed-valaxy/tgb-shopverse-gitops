@@ -32,7 +32,7 @@ permissions:
   id-token: write
 
 env:
-  RUNS_ON: ubuntu-latest
+  RUNS_ON: shopverse-gitops-runners             # ubuntu-latest
 
 jobs:
 
@@ -62,7 +62,8 @@ jobs:
 
   Detect-Changes-Job:
     name: Detect GitOps Changes
-    runs-on: ubuntu-latest
+    needs: Set-Variables-Job
+    runs-on: ${{ needs.Set-Variables-Job.outputs.runner }}
 
     outputs:
       component: ${{ steps.detect.outputs.component }}
@@ -185,8 +186,8 @@ jobs:
   Dev-GitOps-Job:
     if: ${{ needs.Detect-Changes-Job.outputs.environment == 'dev' }}
     needs: 
-      - Detect-Changes-Job
       - Set-Variables-Job
+      - Detect-Changes-Job
     uses: ./.github/workflows/reusable-dev-gitops.yml
     with:
       runner: ${{ needs.Set-Variables-Job.outputs.runner }}
@@ -209,8 +210,8 @@ jobs:
   Qa-GitOps-Job:
     if: needs.Detect-Changes-Job.outputs.environment == 'qa'
     needs: 
-      - Detect-Changes-Job
       - Set-Variables-Job
+      - Detect-Changes-Job
     uses: ./.github/workflows/reusable-qa-gitops-pr.yml
     with:
       runner: ${{ needs.Set-Variables-Job.outputs.runner }}
@@ -223,8 +224,8 @@ jobs:
   Prod-GitOps-Job:
     if: needs.Detect-Changes-Job.outputs.environment == 'prod'
     needs: 
-      - Detect-Changes-Job
       - Set-Variables-Job
+      - Detect-Changes-Job
     uses: ./.github/workflows/reusable-prod-gitops-pr.yml
     with:
       runner: ${{ needs.Set-Variables-Job.outputs.runner }}
