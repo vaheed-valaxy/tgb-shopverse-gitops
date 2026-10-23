@@ -38,7 +38,7 @@ jobs:
           TAG: "latest"
           IMAGE_WITH_TAG="$IMAGE:$TAG"
 
-          docker build -t "$IMAGE_WITH_TAG" .
+          docker build -t "$IMAGE_WITH_TAG" -f Dockerfiles/Dockerfile .
 
           echo "IMAGE=$IMAGE_WITH_TAG" >> "GITHUB_ENV"
 
