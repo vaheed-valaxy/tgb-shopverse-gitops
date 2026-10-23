@@ -2,7 +2,11 @@ name: ARC Docker Build Test
 
 on:
   workflow_dispatch:
-
+  
+permissions:
+  contents: read
+  id-token: write
+  
 jobs:
   docker-build:
     runs-on: shopverse-gitops-runners
