@@ -1,0 +1,62 @@
+name: ARC Docker Build Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker-build:
+    runs-on: shopverse-gitops-runners
+    env:
+      AWS_ACCOUNT_ID: "254405569649"
+      AWS_REGION: us-east-1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify runner
+        run: |
+          echo "ARC runner picked up the job"
+          uname -a
+          docker version
+
+      - name: Verify Custom Runner Image
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws --version
+          kubectl version --client
+          argocd version --client
+          curl --version
+
+      - name: Build test image
+        run: |
+          ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+          ECR_REPOSITORY: "shopverse-dev/test"
+          
+          IMAGE="${ECR_REGISTRY}/${ECR_REPOSITORY}"
+          TAG: "latest"
+          IMAGE_WITH_TAG="$IMAGE:$TAG"
+
+          docker build -t "$IMAGE_WITH_TAG" .
+
+          echo "IMAGE=$IMAGE_WITH_TAG" >> "GITHUB_ENV"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.aws-ecr-role-arn }}
+          aws-region: $AWS_REGION
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity  
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Push Image to ECR
+        run: |
+          echo "*** Pushing Docker Image With SHA-Tag ***"
+          docker push "$IMAGE"
+      
