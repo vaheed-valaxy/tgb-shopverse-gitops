@@ -46,7 +46,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_ECR_ROLE_ARN }}
-          aws-region: $AWS_REGION
+          aws-region: us-east-1
 
       - name: Verify AWS identity
         run: aws sts get-caller-identity  
