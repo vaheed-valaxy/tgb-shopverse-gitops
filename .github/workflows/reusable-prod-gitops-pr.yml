@@ -62,7 +62,7 @@ env:
 
 jobs:
 
-  GitOps-Validation:
+  GitOps-Validation-Job:
 
     name: "${{ inputs.component }} - ${{ inputs.environment }} - Helm + Kubernetes Security"
     runs-on: ${{ inputs.runner }}
