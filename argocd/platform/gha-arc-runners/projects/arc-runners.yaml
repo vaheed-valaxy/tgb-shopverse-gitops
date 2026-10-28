@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: shopverse-arc-runners
+  namespace: argocd
+
+spec:
+  description: Shopverse GitHub Actions Runner Controller workloads.
+
+  sourceRepos:
+    - ghcr.io/actions/actions-runner-controller-charts
+    - https://github.com/vaheed-valaxy/tgb-shopverse-gitops.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: arc-runners
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
