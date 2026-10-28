@@ -4,7 +4,7 @@ metadata:
   name: arc-controller
   namespace: argocd
 spec:
-  project: default     # Change this to your Project
+  project: shopverse-arc-controller     # default
 
   source:
     repoURL: ghcr.io/actions/actions-runner-controller-charts
