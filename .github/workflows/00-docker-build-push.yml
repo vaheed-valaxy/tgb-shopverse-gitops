@@ -33,35 +33,35 @@ jobs:
           argocd version --client
           curl --version
       
-      # - name: Build test image
-      #   run: |
-      #     ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-      #     ECR_REPOSITORY="shopverse-dev/test"
+      - name: Build test image
+        run: |
+          ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+          ECR_REPOSITORY="shopverse-dev/test"
           
-      #     IMAGE="${ECR_REGISTRY}/${ECR_REPOSITORY}"
-      #     TAG="latest"
-      #     IMAGE_WITH_TAG="$IMAGE:$TAG"
+          IMAGE="${ECR_REGISTRY}/${ECR_REPOSITORY}"
+          TAG="latest"
+          IMAGE_WITH_TAG="$IMAGE:$TAG"
 
-      #     docker build -t "$IMAGE_WITH_TAG" -f Dockerfiles/Dockerfile-sample .
+          docker build -t "$IMAGE_WITH_TAG" -f Dockerfiles/Dockerfile-sample .
 
-      #     echo "IMAGE=$IMAGE_WITH_TAG" >> "$GITHUB_ENV"
+          echo "IMAGE=$IMAGE_WITH_TAG" >> "$GITHUB_ENV"
 
-      # - name: Configure AWS credentials (OIDC)
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     role-to-assume: ${{ vars.AWS_ECR_ROLE_ARN }}
-      #     aws-region: us-east-1
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ECR_ROLE_ARN }}
+          aws-region: us-east-1
 
-      # - name: Verify AWS identity
-      #   run: aws sts get-caller-identity  
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity  
 
-      # - name: Login to Amazon ECR
-      #   id: login-ecr
-      #   uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      # - name: Push Image to ECR
-      #   run: |
-      #     echo "*** Pushing Docker Image With SHA-Tag ***"
-      #     docker push "$IMAGE"
+      - name: Push Image to ECR
+        run: |
+          echo "*** Pushing Docker Image With SHA-Tag ***"
+          docker push "$IMAGE"
           
       
