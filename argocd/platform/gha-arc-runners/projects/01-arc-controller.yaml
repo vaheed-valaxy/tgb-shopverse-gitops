@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: shopverse-arc-controller
+  namespace: argocd
+
+spec:
+  description: Shopverse ARC controller.
+
+  sourceRepos:
+    - ghcr.io/actions/actions-runner-controller-charts
+    # - https://github.com/vaheed-valaxy/tgb-shopverse-gitops.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: arc-systems
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
