@@ -24,14 +24,14 @@ resourceMeta:
 # Node Selector & Tolerations
 template:
   spec:
-    # nodeSelector:
-    #   workload: ci
+    nodeSelector:
+      workload: ci
 
-    # tolerations:
-    #   - key: dedicated
-    #     operator: Equal
-    #     value: ci
-    #     effect: NoSchedule
+    tolerations:
+      - key: dedicated
+        operator: Equal
+        value: ci
+        effect: NoSchedule
 
     containers:
       - name: runner
