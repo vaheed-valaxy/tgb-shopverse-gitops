@@ -16,14 +16,16 @@ controllerServiceAccount:
   name: arc-controller-gha-rs-controller
     
 # ARC Runner Service Account
-resourceMeta:
-  noPermissionServiceAccount:
-    annotations:
-      eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-arc-runner-role"
+# resourceMeta:
+#   noPermissionServiceAccount:
+#     annotations:
+#       eks.amazonaws.com/role-arn: "arn:aws:iam::254405569649:role/shopverse-dev-gha-arc-runner-role"
       
 # Node Selector & Tolerations
 template:
   spec:
+    serviceAccountName: shopverse-gha-arc-runner-sa
+    
     nodeSelector:
       workload: ci
 
