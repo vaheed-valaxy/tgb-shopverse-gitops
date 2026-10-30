@@ -26,14 +26,14 @@ template:
   spec:
     serviceAccountName: shopverse-gha-arc-runner-sa
     
-    nodeSelector:
-      workload: ci
+    # nodeSelector:
+    #   workload: ci
 
-    tolerations:
-      - key: dedicated
-        operator: Equal
-        value: ci
-        effect: NoSchedule
+    # tolerations:
+    #   - key: dedicated
+    #     operator: Equal
+    #     value: ci
+    #     effect: NoSchedule
 
     containers:
       - name: runner
