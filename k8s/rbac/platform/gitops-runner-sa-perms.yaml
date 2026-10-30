@@ -1,6 +1,15 @@
 ---
 
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-runners
+  labels:
+    app.kubernetes.io/part-of: actions-runner
+    
+---
+
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: shopverse-gitops-runner-sa
