@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: shopverse-gitops-runner-sa
+  namespace: arc-runners
+automountServiceAccountToken: true
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: shopverse-gitops-port-forward-role
+  namespace: argocd
+rules:
+  # Allow reading the Argo CD Service.
+  - apiGroups: [""]
+    resources:
+      - services
+    resourceNames:
+      - argocd-server
+    verbs:
+      - get
+
+  # Allow kubectl to discover and inspect pods in argocd.
+  - apiGroups: [""]
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+
+  # Allow port-forwarding to pods in the argocd namespace.
+  - apiGroups: [""]
+    resources:
+      - pods/portforward
+    verbs:
+      - create
+      
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: shopverse-gitops-port-forward-binding
+  namespace: argocd
+subjects:
+  - kind: ServiceAccount
+    name: shopverse-gitops-runner-sa
+    namespace: arc-runners
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: shopverse-gitops-port-forward-role
