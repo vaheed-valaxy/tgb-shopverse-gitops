@@ -467,28 +467,7 @@ jobs:
           kubectl version --client
           argocd version --client
           curl --version
-
-
-      # ======================================================
-      # 4. Configure EKS access
-      # ======================================================
-
-      - name: Configure EKS access
-        shell: bash
-        env:
-          AWS_REGION: ${{ env.AWS_REGION }}
-          EKS_CLUSTER_NAME: ${{ inputs.eks-cluster-name }}
-        run: |
-          set -euo pipefail
-
-          aws sts get-caller-identity
-
-          aws eks update-kubeconfig --region "${AWS_REGION}" --name "${EKS_CLUSTER_NAME}"
-
-          aws eks list-clusters --region "${AWS_REGION}"
-            
-          # kubectl get nodes
-
+          
 
       # ======================================================
       # 5. Verify validated commit is still current
