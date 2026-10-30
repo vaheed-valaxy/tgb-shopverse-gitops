@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: shopverse-gha-arc-runner-sa
+  namespace: arc-runners
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::254405569649:role/shopverse-dev-gha-arc-runner-role
