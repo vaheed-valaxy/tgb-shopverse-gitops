@@ -24,7 +24,7 @@ controllerServiceAccount:
 # Node Selector & Tolerations
 template:
   spec:
-    serviceAccountName: shopverse-gha-arc-runner-sa
+    serviceAccountName:  shopverse-gitops-runner-sa
     
     nodeSelector:
       workload: ci
