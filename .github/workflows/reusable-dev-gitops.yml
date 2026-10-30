@@ -470,7 +470,7 @@ jobs:
           
 
       # ======================================================
-      # 5. Verify validated commit is still current
+      # 4. Verify validated commit is still current
       # ======================================================
 
       - name: Verify validated commit is still current
