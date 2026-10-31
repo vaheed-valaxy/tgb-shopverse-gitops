@@ -571,7 +571,7 @@ jobs:
           cat /tmp/argocd-port-forward.log
 
           exit 1
-
+          
 
       # ======================================================
       # 7. Login to Argo CD & Check App
@@ -580,25 +580,46 @@ jobs:
       - name: Login to Argo CD & Check App
         shell: bash
         env:
-          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}     # Argo CD CLI uses this token for authentication. The identity is the Argo CD account/project role that owns this token.
-          ARGOCD_HOST: ${{ env.ARGOCD_HOST }}
-          ARGOCD_PORT: ${{ env.ARGOCD_PORT }}
-          ARGOCD_APP: ${{ inputs.argocd-app }}  
+          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+          ARGOCD_HOST: ${{ inputs.argocd-host }}
+          ARGOCD_PORT: ${{ inputs.argocd-port }}
+          ARGOCD_APP: ${{ inputs.argocd-app }}
         run: |
           set -euo pipefail
 
-          if [[ -z "${ARGOCD_AUTH_TOKEN}" ]]; then
-            echo "ARGOCD_AUTH_TOKEN is not configured."
+          if [[ -z "${ARGOCD_AUTH_TOKEN:-}" ]]; then
+            echo "::error::ARGOCD_AUTH_TOKEN is not configured."
             exit 1
           fi
 
-          echo "Logged into ArgoCD as:"
+          if [[ -z "${ARGOCD_APP:-}" ]]; then
+            echo "::error::ARGOCD_APP is not configured."
+            exit 1
+          fi
+
+          ARGOCD_SERVER="${ARGOCD_HOST}:${ARGOCD_PORT}"
+
+          echo "Argo CD server: ${ARGOCD_SERVER}"
+          echo "Argo CD application: ${ARGOCD_APP}"
+
+          echo "Logging into Argo CD..."
+
+          argocd login "${ARGOCD_SERVER}" \
+            --auth-token "${ARGOCD_AUTH_TOKEN}" \
+            --plaintext
+
+          echo "Checking authenticated Argo CD account..."
+
           argocd account get-user-info
+
+          echo "Getting Argo CD application..."
+
+          argocd app get "${ARGOCD_APP}"
           
           echo "Getting Application..."
           argocd app get "${ARGOCD_APP}"
 
-
+      
       # ======================================================
       # 8. Sync EXACT validated Git commit
       # ======================================================
@@ -606,16 +627,31 @@ jobs:
       - name: Sync DEV application
         shell: bash
         env:
+          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+          ARGOCD_HOST: ${{ inputs.argocd-host }}
+          ARGOCD_PORT: ${{ inputs.argocd-port }}
           ARGOCD_APP: ${{ inputs.argocd-app }}
           VALIDATED_COMMIT: ${{ needs.GitOps-Validation-Job.outputs.validated-commit }}
         run: |
           set -euo pipefail
 
+          if [[ -z "${ARGOCD_AUTH_TOKEN:-}" ]]; then
+            echo "::error::ARGOCD_AUTH_TOKEN is not configured."
+            exit 1
+          fi
+
+          ARGOCD_SERVER="${ARGOCD_HOST}:${ARGOCD_PORT}"
+
           echo "Deploying validated GitOps commit:"
           echo "${VALIDATED_COMMIT}"
 
-          argocd app sync "${ARGOCD_APP}" --revision "${VALIDATED_COMMIT}"
-            
+          argocd \
+            --server "${ARGOCD_SERVER}" \
+            --auth-token "${ARGOCD_AUTH_TOKEN}" \
+            --plaintext \
+            app sync "${ARGOCD_APP}" \
+            --revision "${VALIDATED_COMMIT}"
+      
             
       # ======================================================
       # 9. Wait for DEV application
