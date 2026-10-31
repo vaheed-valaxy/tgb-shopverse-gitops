@@ -552,7 +552,7 @@ jobs:
           rm -f /tmp/argocd-port-forward.pid
           rm -f /tmp/argocd-port-forward.log
 
-          kubectl -n "${ARGOCD_NAMESPACE}" port-forward svc/argocd-server "${ARGOCD_PORT}:443" > /tmp/argocd-port-forward.log 2>&1 &
+          kubectl -n "${ARGOCD_NAMESPACE}" port-forward svc/argocd-server "${ARGOCD_PORT}:443" --address 127.0.0.1 > /tmp/argocd-port-forward.log 2>&1 &
             
           echo $! > /tmp/argocd-port-forward.pid
 
