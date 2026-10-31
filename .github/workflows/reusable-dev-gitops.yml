@@ -634,7 +634,10 @@ jobs:
           echo "Deploying validated GitOps commit:"
           echo "${VALIDATED_COMMIT}"
 
-          argocd app sync "${ARGOCD_APP}" --server "${ARGOCD_SERVER}" --insecure
+          argocd app sync "${ARGOCD_APP}" \
+            --revision "${VALIDATED_COMMIT} \ 
+            --server "${ARGOCD_SERVER}" \ 
+            --insecure
   
   
       # ======================================================
