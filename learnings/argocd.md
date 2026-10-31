@@ -36,7 +36,8 @@ argocd proj get shopverse-dev
 kubectl -n argocd get appproject shopverse-dev -o yaml
 
 argocd proj role list shopverse-dev
-argocd proj role get shopverse-dev github-actions-dev
+argocd proj role get shopverse-dev shopverse-gh-actions-dev
+
 ```
 
 ## Create ArgoCD token 
