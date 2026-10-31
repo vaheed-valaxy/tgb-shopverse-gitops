@@ -552,14 +552,14 @@ jobs:
           rm -f /tmp/argocd-port-forward.pid
           rm -f /tmp/argocd-port-forward.log
 
-          kubectl -n "${ARGOCD_NAMESPACE}" port-forward svc/argocd-server "${ARGOCD_PORT}:80" > /tmp/argocd-port-forward.log 2>&1 &
+          kubectl -n "${ARGOCD_NAMESPACE}" port-forward svc/argocd-server "${ARGOCD_PORT}:443" > /tmp/argocd-port-forward.log 2>&1 &
             
           echo $! > /tmp/argocd-port-forward.pid
 
           echo "Waiting for Argo CD..."
 
           for i in {1..30}; do
-            if curl -fsS "http://${ARGOCD_HOST}:${ARGOCD_PORT}/healthz" >/dev/null 2>&1; then
+            if curl -kfsS "https://${ARGOCD_HOST}:${ARGOCD_PORT}/healthz" >/dev/null 2>&1; then
               echo "*** Argo CD is reachable...! ***"
               exit 0
             fi
@@ -603,21 +603,11 @@ jobs:
           echo "Argo CD application: ${ARGOCD_APP}"
 
           echo "Checking Argo CD authentication..."
-
-          argocd \
-            --server "${ARGOCD_SERVER}" \
-            --auth-token "${ARGOCD_AUTH_TOKEN}" \
-            --plaintext \
-            account get-user-info
-
+          argocd account get-user-info --server "${ARGOCD_SERVER}" --insecure
+                       
           echo "Checking Argo CD application..."
-
-          argocd \
-            --server "${ARGOCD_SERVER}" \
-            --auth-token "${ARGOCD_AUTH_TOKEN}" \
-            --plaintext \
-            app get "${ARGOCD_APP}"
-
+          argocd app get "${ARGOCD_APP}" --server "${ARGOCD_SERVER}" --insecure
+            
             
       # ======================================================
       # 8. Sync EXACT validated Git commit
@@ -644,14 +634,9 @@ jobs:
           echo "Deploying validated GitOps commit:"
           echo "${VALIDATED_COMMIT}"
 
-          argocd \
-            --server "${ARGOCD_SERVER}" \
-            --auth-token "${ARGOCD_AUTH_TOKEN}" \
-            --plaintext \
-            app sync "${ARGOCD_APP}" \
-            --revision "${VALIDATED_COMMIT}"
-      
-            
+          argocd app sync "${ARGOCD_APP}" --server "${ARGOCD_SERVER}" --insecure
+  
+  
       # ======================================================
       # 9. Wait for DEV application
       # ======================================================
@@ -670,14 +655,12 @@ jobs:
 
           echo "Waiting for application sync and health..."
 
-          argocd \
+          argocd app wait "${ARGOCD_APP}" \
             --server "${ARGOCD_SERVER}" \
-            --auth-token "${ARGOCD_AUTH_TOKEN}" \
-            --plaintext \
-            app wait "${ARGOCD_APP}" \
             --sync \
             --health \
-            --timeout 600
+            --timeout 600 \
+            --insecure
 
 
       # ======================================================
@@ -702,11 +685,7 @@ jobs:
 
           ARGOCD_SERVER="${ARGOCD_HOST}:${ARGOCD_PORT}"
 
-          argocd \
-            --server "${ARGOCD_SERVER}" \
-            --auth-token "${ARGOCD_AUTH_TOKEN}" \
-            --plaintext \
-            app get "${ARGOCD_APP}"
+          argocd app get "${ARGOCD_APP}" --server "${ARGOCD_SERVER}" --insecure
 
           exit 0
 
