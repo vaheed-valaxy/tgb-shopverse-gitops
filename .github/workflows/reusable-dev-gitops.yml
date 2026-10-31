@@ -571,13 +571,13 @@ jobs:
           cat /tmp/argocd-port-forward.log
 
           exit 1
+
           
-
       # ======================================================
-      # 7. Login to Argo CD & Check App
+      # 7. Check Argo CD Authentication & Application
       # ======================================================
 
-      - name: Login to Argo CD & Check App
+      - name: Check Argo CD Authentication & Application
         shell: bash
         env:
           ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
@@ -602,24 +602,23 @@ jobs:
           echo "Argo CD server: ${ARGOCD_SERVER}"
           echo "Argo CD application: ${ARGOCD_APP}"
 
-          echo "Logging into Argo CD..."
+          echo "Checking Argo CD authentication..."
 
-          argocd login "${ARGOCD_SERVER}" \
+          argocd \
+            --server "${ARGOCD_SERVER}" \
             --auth-token "${ARGOCD_AUTH_TOKEN}" \
-            --plaintext
+            --plaintext \
+            account get-user-info
 
-          echo "Checking authenticated Argo CD account..."
+          echo "Checking Argo CD application..."
 
-          argocd account get-user-info
+          argocd \
+            --server "${ARGOCD_SERVER}" \
+            --auth-token "${ARGOCD_AUTH_TOKEN}" \
+            --plaintext \
+            app get "${ARGOCD_APP}"
 
-          echo "Getting Argo CD application..."
-
-          argocd app get "${ARGOCD_APP}"
-          
-          echo "Getting Application..."
-          argocd app get "${ARGOCD_APP}"
-
-      
+            
       # ======================================================
       # 8. Sync EXACT validated Git commit
       # ======================================================
@@ -660,12 +659,22 @@ jobs:
       - name: Wait for DEV application
         shell: bash
         env:
+          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+          ARGOCD_HOST: ${{ inputs.argocd-host }}
+          ARGOCD_PORT: ${{ inputs.argocd-port }}
           ARGOCD_APP: ${{ inputs.argocd-app }}
         run: |
           set -euo pipefail
 
-          argocd app wait \
-            "${ARGOCD_APP}" \
+          ARGOCD_SERVER="${ARGOCD_HOST}:${ARGOCD_PORT}"
+
+          echo "Waiting for application sync and health..."
+
+          argocd \
+            --server "${ARGOCD_SERVER}" \
+            --auth-token "${ARGOCD_AUTH_TOKEN}" \
+            --plaintext \
+            app wait "${ARGOCD_APP}" \
             --sync \
             --health \
             --timeout 600
@@ -679,11 +688,27 @@ jobs:
         if: always()
         shell: bash
         env:
+          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+          ARGOCD_HOST: ${{ inputs.argocd-host }}
+          ARGOCD_PORT: ${{ inputs.argocd-port }}
           ARGOCD_APP: ${{ inputs.argocd-app }}
         run: |
           set +e
 
-          argocd app get "${ARGOCD_APP}"
+          if [[ -z "${ARGOCD_AUTH_TOKEN:-}" ]]; then
+            echo "::warning::ARGOCD_AUTH_TOKEN is not configured."
+            exit 0
+          fi
+
+          ARGOCD_SERVER="${ARGOCD_HOST}:${ARGOCD_PORT}"
+
+          argocd \
+            --server "${ARGOCD_SERVER}" \
+            --auth-token "${ARGOCD_AUTH_TOKEN}" \
+            --plaintext \
+            app get "${ARGOCD_APP}"
+
+          exit 0
 
 
       # ======================================================
