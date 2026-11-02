@@ -13,11 +13,11 @@ spec:
               elements: 
                 - project: shopverse
                   env: dev
-                  repoURL: https://github.com/vaheed-valaxy/shopverse-gitops.git
+                  repoURL: https://github.com/vaheed-valaxy/tgb-shopverse-gitops.git
 
           # SERVICES (auto-discovered from ONE env only to avoid duplication)        
           - git:
-              repoURL: https://github.com/vaheed-valaxy/shopverse-gitops.git
+              repoURL: https://github.com/vaheed-valaxy/tgb-shopverse-gitops.git
               revision: main
               directories:
                 - path: helm-charts-new/services/*
