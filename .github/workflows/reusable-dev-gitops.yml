@@ -607,7 +607,7 @@ jobs:
                        
           echo "Checking Argo CD application..."
           argocd app get "${ARGOCD_APP}" --server "${ARGOCD_SERVER}" --insecure
-            
+          
             
       # ======================================================
       # 8. Sync EXACT validated Git commit
@@ -629,16 +629,28 @@ jobs:
             exit 1
           fi
 
+          if [[ -z "${ARGOCD_APP:-}" ]]; then
+            echo "::error::ARGOCD_APP is not configured."
+            exit 1
+          fi
+
+          if [[ -z "${VALIDATED_COMMIT:-}" ]]; then
+            echo "::error::VALIDATED_COMMIT is not configured."
+            exit 1
+          fi
+
           ARGOCD_SERVER="${ARGOCD_HOST}:${ARGOCD_PORT}"
 
+          echo "Argo CD server: ${ARGOCD_SERVER}"
+          echo "Argo CD application: ${ARGOCD_APP}"
           echo "Deploying validated GitOps commit:"
           echo "${VALIDATED_COMMIT}"
 
           argocd app sync "${ARGOCD_APP}" \
-            --revision "${VALIDATED_COMMIT}" \ 
-            --server "${ARGOCD_SERVER}" \ 
-            --insecure
-  
+            --revision "${VALIDATED_COMMIT}" \
+            --server "${ARGOCD_SERVER}" \
+            --insecure    
+      
   
       # ======================================================
       # 9. Wait for DEV application
