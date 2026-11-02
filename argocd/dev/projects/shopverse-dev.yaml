@@ -10,7 +10,7 @@ spec:
   # Allowed Git repositories
   # ============================================================
   sourceRepos:
-    - https://github.com/vaheed-valaxy/shopverse-gitops.git
+    - https://github.com/vaheed-valaxy/tgb-shopverse-gitops.git
 
   # ============================================================
   # Allowed destinations
