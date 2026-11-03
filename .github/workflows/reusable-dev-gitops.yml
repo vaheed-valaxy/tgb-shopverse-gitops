@@ -440,7 +440,7 @@ jobs:
             exit 1
           fi
           
-          echo "Commit is still Latest...Proceeding...!"
+          echo "Commit is still Latest...Proceeding further...!"
           
 
       # ======================================================
