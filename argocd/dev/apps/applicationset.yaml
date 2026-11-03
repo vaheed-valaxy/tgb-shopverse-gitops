@@ -51,11 +51,11 @@ spec:
         server: https://kubernetes.default.svc
         namespace: "{{project}}-{{env}}"
 
-      # DEV deployment is intentionally MANUAL.
-      # Do NOT add spec.syncPolicy.automated.
-      # Git changes will make the Application OutOfSync,
-      # but deployment happens only when GitHub Actions runs:
-      #   argocd app sync shopverse-dev-backend
+      # - DEV deployment is intentionally MANUAL.
+      # - Do NOT add spec.syncPolicy.automated.
+      # - Git changes will make the Application OutOfSync,
+      # - But deployment happens only when GitHub Actions runs: "argocd app sync shopverse-dev-backend"
+        
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
