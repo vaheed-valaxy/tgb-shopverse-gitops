@@ -287,7 +287,8 @@ jobs:
       # ======================================================
 
       - name: Setup Trivy
-        uses: aquasecurity/setup-trivy@v0.2.6
+        # uses: aquasecurity/setup-trivy@v0.2.6
+        uses: vaheed-valaxy/central-github-actions/.github/actions/setup-trivy@main
         with:
           version: ${{ env.TRIVY_VERSION }}
 
