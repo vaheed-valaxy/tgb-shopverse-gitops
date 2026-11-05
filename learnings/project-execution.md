@@ -54,6 +54,8 @@ repo: `tgb-shopverse-gitops`
 # Create secret
 # Fine grained Token: tgb-shopverse-infra, backend, frontend, gitops (Admin: read and write)
 
+kubectl create namespace arc-runners
+
 kubectl create secret generic shopverse-gha-arc-token \
   -n arc-runners \
   --from-literal=github_token=<GITHUB_TOKEN>
