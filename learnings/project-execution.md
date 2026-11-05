@@ -88,7 +88,7 @@ kubectl apply -f shopverse-dev.yaml
 ```
 - **Create ApplicationSet**  
 ```bash
-cd atgocd/dev/apps
+cd argocd/dev/apps
 kubectl apply -f applicationset.yaml
 ```
 
