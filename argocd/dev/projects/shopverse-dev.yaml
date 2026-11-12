@@ -55,7 +55,7 @@ spec:
         # Allow GitHub Actions to sync the DEV applications
         - p, proj:shopverse-dev:shopverse-gh-actions-dev, applications, sync, shopverse-dev/*, allow
           
-
+        # -p, proj:<proj_name>:<role_name>, applications, sync, <proj_name>/*, allow
   # ============================================================
   # Description
   # ============================================================
